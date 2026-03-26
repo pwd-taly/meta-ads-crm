@@ -24,7 +24,12 @@ export default function LoginPage() {
       router.push("/");
       router.refresh();
     } else {
-      setError("Incorrect password. Try again.");
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 429) {
+        setError(data.error || "Too many attempts. Please wait before trying again.");
+      } else {
+        setError("Invalid credentials.");
+      }
     }
   }
 

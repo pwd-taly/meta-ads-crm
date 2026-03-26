@@ -1,5 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { createHmac } from "crypto";
+
+async function verifyMetaSignature(req: NextRequest, rawBody: string): Promise<boolean> {
+  const appSecret = process.env.META_APP_SECRET;
+  if (!appSecret) return true; // skip if not configured
+  const signature = req.headers.get("x-hub-signature-256");
+  if (!signature) return false;
+  const expected = "sha256=" + createHmac("sha256", appSecret).update(rawBody).digest("hex");
+  // Timing-safe comparison
+  try {
+    const { timingSafeEqual } = await import("crypto");
+    return timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+  } catch {
+    return signature === expected;
+  }
+}
 
 // GET: Meta verification handshake
 export async function GET(req: NextRequest) {
@@ -19,7 +35,12 @@ export async function GET(req: NextRequest) {
 
 // POST: Receive new lead from Meta
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  const rawBody = await req.text();
+  const valid = await verifyMetaSignature(req, rawBody);
+  if (!valid) {
+    return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+  }
+  const body = JSON.parse(rawBody);
 
   try {
     const entries = body?.entry || [];
