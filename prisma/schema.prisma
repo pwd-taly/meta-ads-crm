@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id           String    @id @default(cuid())
+  metaLeadId   String?   @unique
+  name         String
+  email        String?
+  phone        String?
+  campaignId   String?
+  campaignName String?
+  adsetName    String?
+  adName       String?
+  formName     String?
+  status       String    @default("new")
+  bookingDate  DateTime?
+  saleAmount   Float?
+  notes        String?
+  source       String    @default("webhook")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Settings {
+  id                 Int     @id @default(1)
+  metaAccessToken    String?
+  metaAdAccountId    String?
+  metaPageId         String?
+  webhookVerifyToken String?
+  waMessageTemplate   String? @default("Hi {{name}}, thanks for your interest! I'd love to share more details with you.")
+  waMessageTemplateEs String? @default("Hola {{name}}, ¡gracias por tu interés! Me encantaría compartir más detalles contigo.")
+}
