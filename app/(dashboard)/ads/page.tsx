@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { AdsAnalyticsClient } from "@/components/ads/AdsAnalyticsClient";
 import { prisma } from "@/lib/db";
 

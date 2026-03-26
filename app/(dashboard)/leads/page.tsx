@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { LeadsTable } from "@/components/leads/LeadsTable";
 import { prisma } from "@/lib/db";
 
