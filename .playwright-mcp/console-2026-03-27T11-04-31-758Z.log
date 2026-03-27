@@ -1,0 +1,46 @@
+[     712ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/login:0
+[    1042ms] Error: Syntax error: /Users/macm4/Desktop/meta-ads-crm/app/globals.css The `text-foreground` class does not exist. If `text-foreground` is a custom class, make sure it is defined within a `@layer` directive.
+
+> 1 | @tailwind base;
+    | ^
+  2 | @tailwind components;
+  3 | @tailwind utilities;
+
+    at getCssError (file:///Users/macm4/Desktop/meta-ads-crm/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/parseCss.js:24:16)
+    at getModuleBuildError (file:///Users/macm4/Desktop/meta-ads-crm/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/webpackModuleError.js:116:43)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async (file:///Users/macm4/Desktop/meta-ads-crm/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/index.js:29:49)
+    at async (file:///Users/macm4/Desktop/meta-ads-crm/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/index.js:27:21)
+[    1039ms] [ERROR] ./app/globals.css:1:1
+Syntax error: /Users/macm4/Desktop/meta-ads-crm/app/globals.css The `text-foreground` class does not exist. If `text-foreground` is a custom class, make sure it is defined within a `@layer` directive.
+
+> 1 | @tailwind base;
+    | ^
+  2 | @tailwind components;
+  3 | @tailwind utilities; @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[    1039ms] [ERROR] ./app/globals.css
+Syntax error: /Users/macm4/Desktop/meta-ads-crm/app/globals.css The `text-foreground` class does not exist. If `text-foreground` is a custom class, make sure it is defined within a `@layer` directive. (1:1)
+
+> 1 | @tailwind base;
+    | ^
+  2 | @tailwind components;
+  3 | @tailwind utilities;
+-- inner error --
+Syntax error: /Users/macm4/Desktop/meta-ads-crm/app/globals.css The `text-foreground` class does not exist. If `text-foreground` is a custom class, make sure it is defined within a `@layer` directive. (1:1)
+
+> 1 | @tailwind base;
+    | ^
+  2 | @tailwind components;
+  3 | @tailwind utilities;
+Generated code for /Users/macm4/Desktop/meta-ads-crm/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!/Users/macm4/Desktop/meta-ads-crm/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!/Users/macm4/Desktop/meta-ads-crm/app/globals.css @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[    1041ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/favicon.ico:0
+[    1151ms] [ERROR] Loading plugin data from 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBpZD0ic3ZnIj48dGV4dCB4PSIxMCIgeT0iMjAiIGlkPSJzdmctbGluay10ZXh0Ij50ZXh0PC90ZXh0Pjwvc3ZnPg==' violates the following Content Security Policy directive: "default-src 'self'". Note that 'object-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked. @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/components/Overlay/maintain--tab-focus.js:236
+[    1152ms] [ERROR] Loading plugin data from 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBpZD0ic3ZnIj48dGV4dCB4PSIxMCIgeT0iMjAiIGlkPSJzdmctbGluay10ZXh0Ij50ZXh0PC90ZXh0Pjwvc3ZnPg==' violates the following Content Security Policy directive: "default-src 'self'". Note that 'object-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked. @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/components/Overlay/maintain--tab-focus.js:236
+[   22653ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:347

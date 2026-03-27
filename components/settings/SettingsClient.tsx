@@ -91,76 +91,89 @@ export function SettingsClient({ initialSettings }: Props) {
     setTesting(false);
   };
 
+  const inputClass = "w-full border border-white/[0.08] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 transition-colors bg-white/[0.04] text-zinc-300 placeholder:text-zinc-600";
+  const readonlyClass = "flex-1 border border-white/[0.06] rounded-xl px-3 py-2.5 text-sm bg-white/[0.02] text-zinc-500 font-mono text-xs";
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Meta API */}
-      <div className="bg-white rounded-xl border p-6 space-y-5">
+      <div className="bg-[#111113] rounded-2xl border border-white/[0.06] p-6 space-y-5">
         <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-sm">Meta API Credentials</h2>
+          <div>
+            <h2 className="font-semibold text-sm text-white">Meta API Credentials</h2>
+            <p className="text-xs text-zinc-500 mt-0.5">Connect your Meta Ads account</p>
+          </div>
           <a
             href="https://developers.facebook.com/tools/explorer/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+            className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 transition-colors font-medium"
           >
-            Get Access Token <ExternalLink className="w-3 h-3" />
+            Get Token <ExternalLink className="w-3 h-3" />
           </a>
         </div>
 
         <div className="space-y-4">
           <div>
-            <label className="text-xs font-medium text-muted-foreground block mb-1.5">
-              Access Token {initialSettings.hasToken && <span className="text-green-600">(saved ✓)</span>}
+            <label className="text-xs font-semibold text-zinc-500 block mb-1.5 uppercase tracking-wide">
+              Access Token {initialSettings.hasToken && (
+                <span className="text-emerald-400 font-semibold normal-case tracking-normal ml-1">✓ saved</span>
+              )}
             </label>
             <input
               type="password"
               value={token}
               onChange={(e) => setToken(e.target.value)}
-              placeholder={initialSettings.hasToken ? "Enter new token to replace" : "EAAxxxxxxxxxxxx…"}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+              placeholder={initialSettings.hasToken ? "Enter new token to replace…" : "EAAxxxxxxxxxxxx…"}
+              className={inputClass}
             />
-            <p className="text-xs text-muted-foreground mt-1">
-              Use a long-lived Page Access Token with <code className="bg-muted px-1 rounded">ads_read</code> permission.
+            <p className="text-xs text-zinc-600 mt-1.5">
+              Use a long-lived Page Access Token with <code className="bg-white/[0.06] text-zinc-400 px-1.5 py-0.5 rounded-md font-mono text-[11px]">ads_read</code> permission.
             </p>
           </div>
 
-          <div>
-            <label className="text-xs font-medium text-muted-foreground block mb-1.5">
-              Ad Account ID
-            </label>
-            <input
-              type="text"
-              value={adAccountId}
-              onChange={(e) => setAdAccountId(e.target.value)}
-              placeholder="act_123456789"
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-medium text-muted-foreground block mb-1.5">
-              Page ID
-            </label>
-            <input
-              type="text"
-              value={pageId}
-              onChange={(e) => setPageId(e.target.value)}
-              placeholder="123456789"
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-xs font-semibold text-zinc-500 block mb-1.5 uppercase tracking-wide">
+                Ad Account ID
+              </label>
+              <input
+                type="text"
+                value={adAccountId}
+                onChange={(e) => setAdAccountId(e.target.value)}
+                placeholder="act_123456789"
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-zinc-500 block mb-1.5 uppercase tracking-wide">
+                Page ID
+              </label>
+              <input
+                type="text"
+                value={pageId}
+                onChange={(e) => setPageId(e.target.value)}
+                placeholder="123456789"
+                className={inputClass}
+              />
+            </div>
           </div>
 
           <button
             onClick={testConnection}
             disabled={testing}
-            className="inline-flex items-center gap-1.5 px-3 py-2 border rounded-lg text-sm hover:bg-muted transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 border border-white/[0.08] rounded-xl text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${testing ? "animate-spin" : ""}`} />
-            Test Connection
+            {testing ? "Testing…" : "Test Connection"}
           </button>
 
           {testResult && (
-            <div className={`text-sm px-3 py-2 rounded-lg ${testResult.ok ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
+            <div className={`text-sm px-3.5 py-2.5 rounded-xl border font-medium ${
+              testResult.ok
+                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                : "bg-red-500/10 text-red-400 border-red-500/20"
+            }`}>
               {testResult.message}
             </div>
           )}
@@ -168,43 +181,46 @@ export function SettingsClient({ initialSettings }: Props) {
       </div>
 
       {/* Webhook */}
-      <div className="bg-white rounded-xl border p-6 space-y-4">
-        <h2 className="font-semibold text-sm">Meta Webhook Setup</h2>
+      <div className="bg-[#111113] rounded-2xl border border-white/[0.06] p-6 space-y-4">
+        <div>
+          <h2 className="font-semibold text-sm text-white">Meta Webhook Setup</h2>
+          <p className="text-xs text-zinc-500 mt-0.5">Auto-receive leads from Meta Lead Ads forms</p>
+        </div>
 
         <div>
-          <label className="text-xs font-medium text-muted-foreground block mb-1.5">Webhook URL</label>
+          <label className="text-xs font-semibold text-zinc-500 block mb-1.5 uppercase tracking-wide">Webhook URL</label>
           <div className="flex gap-2">
             <input
               type="text"
               readOnly
               value={webhookUrl}
-              className="flex-1 border rounded-lg px-3 py-2 text-sm bg-muted/30 text-muted-foreground"
+              className={readonlyClass}
             />
             <button
               onClick={copyWebhook}
-              className="px-3 py-2 border rounded-lg hover:bg-muted transition-colors text-sm"
+              className="px-3.5 py-2.5 border border-white/[0.08] rounded-xl hover:bg-white/[0.04] transition-colors text-zinc-400 hover:text-white"
             >
-              {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
             </button>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Add this URL in your Meta App → Webhooks → Page → leadgen subscription.
+          <p className="text-xs text-zinc-600 mt-1.5">
+            Add this in Meta App → Webhooks → Page → leadgen subscription.
           </p>
         </div>
 
         <div>
-          <label className="text-xs font-medium text-muted-foreground block mb-1.5">Verify Token</label>
+          <label className="text-xs font-semibold text-zinc-500 block mb-1.5 uppercase tracking-wide">Verify Token</label>
           <div className="flex gap-2">
             <input
               type="text"
               readOnly
               value={verifyToken || "Click Generate to create a token"}
-              className="flex-1 border rounded-lg px-3 py-2 text-sm bg-muted/30 text-muted-foreground font-mono text-xs"
+              className={readonlyClass}
             />
             <button
               onClick={generateVerifyToken}
               disabled={generatingToken}
-              className="px-3 py-2 border rounded-lg hover:bg-muted transition-colors text-sm whitespace-nowrap"
+              className="px-4 py-2.5 border border-white/[0.08] rounded-xl hover:bg-white/[0.04] transition-colors text-sm font-medium text-zinc-400 hover:text-white whitespace-nowrap disabled:opacity-50"
             >
               {generatingToken ? "…" : "Generate"}
             </button>
@@ -213,40 +229,38 @@ export function SettingsClient({ initialSettings }: Props) {
       </div>
 
       {/* WhatsApp Templates */}
-      <div className="bg-white rounded-xl border p-6 space-y-5">
+      <div className="bg-[#111113] rounded-2xl border border-white/[0.06] p-6 space-y-5">
         <div>
-          <h2 className="font-semibold text-sm">WhatsApp Message Templates</h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Use <code className="bg-muted px-1 rounded">{"{{name}}"}</code> to insert the lead&apos;s name. The button on each lead lets you pick which language to send.
+          <h2 className="font-semibold text-sm text-white">WhatsApp Message Templates</h2>
+          <p className="text-xs text-zinc-500 mt-0.5">
+            Use <code className="bg-white/[0.06] text-zinc-400 px-1.5 py-0.5 rounded-md font-mono text-[11px]">{"{{name}}"}</code> to insert the lead&apos;s name. Each lead card lets you pick EN or ES.
           </p>
         </div>
 
-        {/* English */}
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">🇬🇧 English</span>
+        <div className="grid grid-cols-1 gap-4">
+          {/* English */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-zinc-500 block uppercase tracking-wide">🇬🇧 English</label>
+            <textarea
+              value={waTemplate}
+              onChange={(e) => setWaTemplate(e.target.value)}
+              rows={3}
+              className="w-full border border-white/[0.08] rounded-xl px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 transition-colors bg-white/[0.04] text-zinc-300 placeholder:text-zinc-600"
+              placeholder="Hi {{name}}, thanks for your interest!…"
+            />
           </div>
-          <textarea
-            value={waTemplate}
-            onChange={(e) => setWaTemplate(e.target.value)}
-            rows={3}
-            className="w-full border rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
-            placeholder="Hi {{name}}, thanks for your interest!…"
-          />
-        </div>
 
-        {/* Spanish */}
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">🇪🇸 Spanish</span>
+          {/* Spanish */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-zinc-500 block uppercase tracking-wide">🇪🇸 Spanish</label>
+            <textarea
+              value={waTemplateEs}
+              onChange={(e) => setWaTemplateEs(e.target.value)}
+              rows={3}
+              className="w-full border border-white/[0.08] rounded-xl px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 transition-colors bg-white/[0.04] text-zinc-300 placeholder:text-zinc-600"
+              placeholder="Hola {{name}}, ¡gracias por tu interés!…"
+            />
           </div>
-          <textarea
-            value={waTemplateEs}
-            onChange={(e) => setWaTemplateEs(e.target.value)}
-            rows={3}
-            className="w-full border rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
-            placeholder="Hola {{name}}, ¡gracias por tu interés!…"
-          />
         </div>
       </div>
 
@@ -254,7 +268,7 @@ export function SettingsClient({ initialSettings }: Props) {
       <button
         onClick={save}
         disabled={saving}
-        className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-2.5 btn-gradient text-white rounded-xl text-sm font-semibold disabled:opacity-50 transition-all shadow-md shadow-blue-500/20 hover:shadow-blue-500/30"
       >
         <Save className="w-4 h-4" />
         {saving ? "Saving…" : saved ? "Saved ✓" : "Save Settings"}

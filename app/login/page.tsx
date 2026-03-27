@@ -34,37 +34,58 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A]">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#060612]">
+
+      {/* Animated background blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="blob absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#1877F2]/20 blur-[80px]" />
+        <div className="blob blob-delay-2 absolute top-[60%] right-[-5%] w-[400px] h-[400px] rounded-full bg-[#0ea5e9]/15 blur-[80px]" />
+        <div className="blob blob-delay-4 absolute bottom-[-10%] left-[30%] w-[350px] h-[350px] rounded-full bg-purple-600/10 blur-[80px]" />
+      </div>
+
+      {/* Subtle grid overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)`,
+          backgroundSize: "40px 40px",
+        }}
+      />
+
+      <div className="relative z-10 w-full max-w-sm px-4">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 rounded-xl bg-[#1877F2] flex items-center justify-center mb-3">
-            <Zap className="w-6 h-6 text-white" />
+          <div className="w-14 h-14 rounded-2xl btn-gradient flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+            <Zap className="w-7 h-7 text-white" />
           </div>
-          <h1 className="text-white text-xl font-semibold">Meta Ads CRM</h1>
-          <p className="text-white/50 text-sm mt-1">Sign in to your workspace</p>
+          <h1 className="text-white text-2xl font-bold tracking-tight">Meta Ads CRM</h1>
+          <p className="text-white/40 text-sm mt-1">Sign in to your workspace</p>
         </div>
 
+        {/* Glass card */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4"
+          className="glass rounded-2xl p-7 space-y-5"
         >
-          <div className="space-y-1.5">
-            <label className="text-white/70 text-sm font-medium">Password</label>
+          <div className="space-y-2">
+            <label className="text-white/60 text-xs font-medium uppercase tracking-wider">
+              Password
+            </label>
             <div className="relative">
               <input
                 type={show ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-[#1877F2] pr-10"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 text-sm focus:outline-none focus:ring-2 focus:ring-[#1877F2]/50 focus:border-[#1877F2]/50 transition-all pr-10"
                 required
                 autoFocus
               />
               <button
                 type="button"
                 onClick={() => setShow(!show)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
               >
                 {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -72,15 +93,25 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <p className="text-red-400 text-xs">{error}</p>
+            <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+              <p className="text-red-400 text-xs">{error}</p>
+            </div>
           )}
 
           <button
             type="submit"
             disabled={loading || !password}
-            className="w-full bg-[#1877F2] hover:bg-[#1877F2]/90 disabled:opacity-50 text-white font-medium py-2.5 rounded-lg text-sm transition-colors"
+            className="w-full btn-gradient disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl text-sm"
           >
-            {loading ? "Signing in…" : "Sign in"}
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                </svg>
+                Signing in…
+              </span>
+            ) : "Sign in"}
           </button>
         </form>
       </div>

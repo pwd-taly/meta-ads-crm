@@ -31,13 +31,10 @@ export function formatDateShort(date: string | Date) {
   return format(d, "MMM d");
 }
 
-export const STATUS_CONFIG: Record<
-  string,
-  { label: string; color: string; bg: string }
-> = {
-  new: { label: "New", color: "text-blue-700", bg: "bg-blue-50 border-blue-200" },
-  contacted: { label: "Contacted", color: "text-yellow-700", bg: "bg-yellow-50 border-yellow-200" },
-  booked: { label: "Booked", color: "text-purple-700", bg: "bg-purple-50 border-purple-200" },
-  closed: { label: "Closed", color: "text-green-700", bg: "bg-green-50 border-green-200" },
-  lost: { label: "Lost", color: "text-red-700", bg: "bg-red-50 border-red-200" },
+export const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; dot: string }> = {
+  new:       { label: "New",       color: "text-blue-700",   bg: "bg-blue-50 border-blue-200",    dot: "bg-blue-500" },
+  contacted: { label: "Contacted", color: "text-amber-700",  bg: "bg-amber-50 border-amber-200",  dot: "bg-amber-400" },
+  booked:    { label: "Booked",    color: "text-violet-700", bg: "bg-violet-50 border-violet-200", dot: "bg-violet-500" },
+  closed:    { label: "Closed",    color: "text-emerald-700",bg: "bg-emerald-50 border-emerald-200",dot: "bg-emerald-500" },
+  lost:      { label: "Lost",      color: "text-red-600",    bg: "bg-red-50 border-red-200",      dot: "bg-red-400" },
 };

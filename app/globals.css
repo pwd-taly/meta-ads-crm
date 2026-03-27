@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
+    --background: 0 0% 97%;
     --foreground: 222 47% 11%;
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
@@ -21,22 +21,90 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --ring: 221 83% 53%;
-    --radius: 0.5rem;
+    --radius: 0.6rem;
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  * { @apply border-border; }
+  html {
+    background: #0a0a0a;
+    overscroll-behavior: none;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-text-primary;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { @apply bg-transparent; }
 ::-webkit-scrollbar-thumb { @apply bg-border rounded-full; }
-::-webkit-scrollbar-thumb:hover { @apply bg-muted-foreground/40; }
+
+/* ── Gradient button shimmer ── */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.btn-gradient {
+  background: linear-gradient(135deg, #1877F2 0%, #0ea5e9 50%, #1877F2 100%);
+  background-size: 200% auto;
+  transition: background-position 0.5s, box-shadow 0.2s, transform 0.15s;
+}
+.btn-gradient:hover {
+  background-position: right center;
+  box-shadow: 0 4px 20px rgba(24,119,242,0.4);
+  transform: translateY(-1px);
+}
+.btn-gradient:active { transform: translateY(0); }
+
+/* ── Animated login blobs ── */
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+.blob { animation: blob 7s infinite; }
+.blob-delay-2 { animation-delay: 2s; }
+.blob-delay-4 { animation-delay: 4s; }
+
+/* ── Glassmorphism ── */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ── Card hover lift ── */
+.card-hover {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+/* ── Sidebar glow ── */
+.nav-active {
+  background: linear-gradient(135deg, #1877F2 0%, #0ea5e9 100%);
+  box-shadow: 0 4px 15px rgba(24,119,242,0.35);
+}
+
+/* ── Stat card gradient icons ── */
+.icon-blue   { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+.icon-purple { background: linear-gradient(135deg, #ede9fe, #ddd6fe); }
+.icon-green  { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+.icon-orange { background: linear-gradient(135deg, #ffedd5, #fed7aa); }
+
+/* ── Fade in for table rows ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: fadeIn 0.15s ease-out forwards;
+}

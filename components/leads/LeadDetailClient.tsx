@@ -61,10 +61,12 @@ export function LeadDetailClient({ lead: initial, waTemplate, waTemplateEs }: Pr
     { label: "Created", value: formatDate(lead.createdAt) },
   ];
 
+  const inputClass = "w-full rounded-xl border border-white/[0.08] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 bg-white/[0.04] text-zinc-300 placeholder:text-zinc-600";
+
   return (
     <div className="p-8 max-w-4xl mx-auto space-y-6">
       {/* Back */}
-      <Link href="/leads" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+      <Link href="/leads" className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 transition-colors">
         <ArrowLeft className="w-4 h-4" />
         Back to Leads
       </Link>
@@ -72,12 +74,12 @@ export function LeadDetailClient({ lead: initial, waTemplate, waTemplateEs }: Pr
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-lg font-bold text-primary">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600/30 to-blue-400/20 border border-white/[0.06] flex items-center justify-center text-xl font-black text-blue-400">
             {lead.name.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h1 className="text-xl font-bold">{lead.name}</h1>
-            <p className="text-sm text-muted-foreground">{lead.email || lead.phone || "No contact info"}</p>
+            <h1 className="text-xl font-bold text-white">{lead.name}</h1>
+            <p className="text-sm text-zinc-500">{lead.email || lead.phone || "No contact info"}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -86,7 +88,7 @@ export function LeadDetailClient({ lead: initial, waTemplate, waTemplateEs }: Pr
           )}
           <button
             onClick={deleteLead}
-            className="p-2 rounded-lg border hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition-colors"
+            className="p-2 rounded-xl border border-white/[0.08] text-zinc-500 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 transition-colors"
             title="Delete lead"
           >
             <Trash2 className="w-4 h-4" />
@@ -98,14 +100,14 @@ export function LeadDetailClient({ lead: initial, waTemplate, waTemplateEs }: Pr
         {/* Left: Lead info */}
         <div className="lg:col-span-2 space-y-6">
           {/* Info card */}
-          <div className="bg-white rounded-xl border p-6">
-            <h2 className="text-sm font-semibold mb-4">Lead Information</h2>
-            <dl className="grid grid-cols-2 gap-x-6 gap-y-3">
+          <div className="bg-[#111113] rounded-2xl border border-white/[0.06] p-6">
+            <h2 className="text-sm font-semibold text-white mb-4">Lead Information</h2>
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-4">
               {infoRows.map(({ label, value }) =>
                 value ? (
                   <div key={label}>
-                    <dt className="text-xs text-muted-foreground">{label}</dt>
-                    <dd className="text-sm font-medium mt-0.5 break-all">{value}</dd>
+                    <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-600">{label}</dt>
+                    <dd className="text-sm font-medium mt-0.5 break-all text-zinc-300">{value}</dd>
                   </div>
                 ) : null
               )}
@@ -113,14 +115,14 @@ export function LeadDetailClient({ lead: initial, waTemplate, waTemplateEs }: Pr
           </div>
 
           {/* Notes */}
-          <div className="bg-white rounded-xl border p-6">
-            <h2 className="text-sm font-semibold mb-3">Notes</h2>
+          <div className="bg-[#111113] rounded-2xl border border-white/[0.06] p-6">
+            <h2 className="text-sm font-semibold text-white mb-3">Notes</h2>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Add notes about this lead…"
               rows={5}
-              className="w-full border rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+              className="w-full rounded-xl border border-white/[0.08] px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 bg-white/[0.04] text-zinc-300 placeholder:text-zinc-600"
             />
           </div>
         </div>
@@ -128,19 +130,19 @@ export function LeadDetailClient({ lead: initial, waTemplate, waTemplateEs }: Pr
         {/* Right: Status & booking */}
         <div className="space-y-4">
           {/* Status */}
-          <div className="bg-white rounded-xl border p-5">
-            <h2 className="text-sm font-semibold mb-3">Status</h2>
-            <div className="space-y-2">
+          <div className="bg-[#111113] rounded-2xl border border-white/[0.06] p-5">
+            <h2 className="text-sm font-semibold text-white mb-3">Status</h2>
+            <div className="space-y-1.5">
               {["new", "contacted", "booked", "closed", "lost"].map((s) => {
                 const cfg = STATUS_CONFIG[s];
                 return (
                   <button
                     key={s}
                     onClick={() => setStatus(s)}
-                    className={`w-full text-left px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                    className={`w-full text-left px-3 py-2 rounded-xl border text-sm font-medium transition-colors ${
                       status === s
                         ? `${cfg.bg} ${cfg.color} border-current`
-                        : "hover:bg-muted border-transparent"
+                        : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.04] border-transparent"
                     }`}
                   >
                     {cfg.label}
@@ -151,21 +153,21 @@ export function LeadDetailClient({ lead: initial, waTemplate, waTemplateEs }: Pr
           </div>
 
           {/* Booking & Revenue */}
-          <div className="bg-white rounded-xl border p-5 space-y-4">
-            <h2 className="text-sm font-semibold">Booking & Revenue</h2>
+          <div className="bg-[#111113] rounded-2xl border border-white/[0.06] p-5 space-y-4">
+            <h2 className="text-sm font-semibold text-white">Booking & Revenue</h2>
             <div>
-              <label className="text-xs text-muted-foreground block mb-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600 block mb-1.5">
                 Appointment Date
               </label>
               <input
                 type="date"
                 value={bookingDate}
                 onChange={(e) => setBookingDate(e.target.value)}
-                className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className={inputClass}
               />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground block mb-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600 block mb-1.5">
                 Sale Amount ($)
               </label>
               <input
@@ -173,7 +175,7 @@ export function LeadDetailClient({ lead: initial, waTemplate, waTemplateEs }: Pr
                 value={saleAmount}
                 onChange={(e) => setSaleAmount(e.target.value)}
                 placeholder="0.00"
-                className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className={inputClass}
               />
             </div>
           </div>
@@ -182,7 +184,7 @@ export function LeadDetailClient({ lead: initial, waTemplate, waTemplateEs }: Pr
           <button
             onClick={save}
             disabled={saving}
-            className="w-full inline-flex items-center justify-center gap-2 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
+            className="btn-gradient w-full inline-flex items-center justify-center gap-2 py-2.5 text-white rounded-xl text-sm font-semibold shadow-md shadow-blue-500/20 disabled:opacity-50 transition-colors"
           >
             <Save className="w-4 h-4" />
             {saving ? "Saving…" : saved ? "Saved ✓" : "Save Changes"}

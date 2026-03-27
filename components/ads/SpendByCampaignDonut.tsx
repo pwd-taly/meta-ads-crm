@@ -10,8 +10,16 @@ interface Props {
   data: { name: string; value: number }[];
 }
 
+const tooltipStyle = {
+  fontSize: 12,
+  borderRadius: 8,
+  background: "#18181b",
+  border: "1px solid rgba(255,255,255,0.08)",
+  color: "#d4d4d8",
+};
+
 export function SpendByCampaignDonut({ data }: Props) {
-  if (!data?.length) return <div className="h-48 flex items-center justify-center text-sm text-muted-foreground">No spend data</div>;
+  if (!data?.length) return <div className="h-48 flex items-center justify-center text-sm text-zinc-600">No spend data</div>;
   return (
     <ResponsiveContainer width="100%" height={200}>
       <PieChart>
@@ -30,13 +38,13 @@ export function SpendByCampaignDonut({ data }: Props) {
         </Pie>
         <Tooltip
           formatter={(v: number) => [formatCurrency(v), "Spend"]}
-          contentStyle={{ fontSize: 12, borderRadius: 8 }}
+          contentStyle={tooltipStyle}
         />
         <Legend
           iconType="circle"
           iconSize={8}
           formatter={(v: string) => (
-            <span style={{ fontSize: 11 }}>{v.length > 20 ? v.slice(0, 20) + "…" : v}</span>
+            <span style={{ fontSize: 11, color: "#71717a" }}>{v.length > 20 ? v.slice(0, 20) + "…" : v}</span>
           )}
         />
       </PieChart>
