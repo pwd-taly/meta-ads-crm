@@ -33,9 +33,9 @@ export default async function LeadsPage() {
   return (
     <div className="p-8 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Leads</h1>
+        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400">Leads</h1>
         <p className="text-zinc-500 text-sm mt-1">
-          {total} total leads from Meta Ads
+          <span className="font-semibold text-white">{total}</span> total leads from Meta Ads
         </p>
       </div>
       <LeadsTable

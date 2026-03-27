@@ -1,7 +1,7 @@
 "use client";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer,
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, Defs, LinearGradient, Stop,
 } from "recharts";
 import { formatDateShort } from "@/lib/utils";
 
@@ -18,10 +18,16 @@ const tooltipStyle = {
 };
 
 export function SpendLineChart({ data }: Props) {
-  if (!data?.length) return <div className="h-48 flex items-center justify-center text-sm text-zinc-600">No data</div>;
+  if (!data?.length) return <div className="h-60 flex items-center justify-center text-sm text-zinc-600">No data</div>;
   return (
-    <ResponsiveContainer width="100%" height={200}>
-      <LineChart data={data} margin={{ top: 5, right: 5, bottom: 0, left: -15 }}>
+    <ResponsiveContainer width="100%" height={240}>
+      <AreaChart data={data} margin={{ top: 5, right: 5, bottom: 0, left: -15 }}>
+        <Defs>
+          <LinearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0%" stopColor="#1877F2" stopOpacity={0.8} />
+            <Stop offset="100%" stopColor="#1877F2" stopOpacity={0} />
+          </LinearGradient>
+        </Defs>
         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
         <XAxis dataKey="date" tickFormatter={formatDateShort} tick={{ fontSize: 10, fill: "#71717a" }} axisLine={false} tickLine={false} />
         <YAxis tick={{ fontSize: 10, fill: "#71717a" }} tickFormatter={(v) => `$${v}`} axisLine={false} tickLine={false} />
@@ -31,8 +37,8 @@ export function SpendLineChart({ data }: Props) {
           contentStyle={tooltipStyle}
           cursor={{ stroke: "rgba(255,255,255,0.1)" }}
         />
-        <Line type="monotone" dataKey="spend" stroke="#1877F2" strokeWidth={2} dot={false} />
-      </LineChart>
+        <Area type="monotone" dataKey="spend" stroke="#1877F2" strokeWidth={2} fill="url(#spendGrad)" dot={false} />
+      </AreaChart>
     </ResponsiveContainer>
   );
 }

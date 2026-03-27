@@ -35,7 +35,7 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
   };
 
   return (
-    <div className="rounded-lg border border-border overflow-hidden">
+    <div className="rounded-lg border border-white/[0.06] overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
@@ -50,7 +50,7 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
         </TableHeader>
         <TableBody>
           {campaigns.map((campaign) => (
-            <TableRow key={campaign.id}>
+            <TableRow key={campaign.id} className="hover:bg-white/[0.03] transition-colors">
               <TableCell className="font-medium text-text-primary">{campaign.name}</TableCell>
               <TableCell className="text-right text-text-primary font-medium">
                 {formatCurrency(campaign.spend)}
@@ -61,9 +61,14 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
               </TableCell>
               <TableCell className="text-right text-text-primary">{campaign.click_through_rate}%</TableCell>
               <TableCell>
-                <Badge variant={campaign.status === "active" ? "success" : "secondary"}>
-                  {campaign.status === "active" ? "Active" : "Paused"}
-                </Badge>
+                <div className="flex items-center gap-1.5">
+                  {campaign.status === "active" && (
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  )}
+                  <Badge variant={campaign.status === "active" ? "success" : "secondary"}>
+                    {campaign.status === "active" ? "Active" : "Paused"}
+                  </Badge>
+                </div>
               </TableCell>
               <TableCell className="text-right">
                 <Button variant="ghost" size="sm">

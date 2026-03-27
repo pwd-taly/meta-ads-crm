@@ -9,7 +9,7 @@ export default async function AdsPage() {
   return (
     <div className="p-8 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Ads Analytics</h1>
+        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400">Ads Analytics</h1>
         <p className="text-zinc-500 text-sm mt-1">
           Live data from your Meta Ads account
         </p>

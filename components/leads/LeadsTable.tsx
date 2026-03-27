@@ -151,6 +151,16 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
         </div>
       </div>
 
+      {/* KPI Chips */}
+      {!loading && leads.length > 0 && (
+        <div className="flex gap-3 flex-wrap">
+          <div className="px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.1]">
+            <span className="text-xs text-text-secondary">Total Leads</span>
+            <div className="text-lg font-bold text-text-primary">{leads.length}</div>
+          </div>
+        </div>
+      )}
+
       {/* Table */}
       <div className="bg-[#111113] rounded-2xl border border-white/[0.06] overflow-hidden">
         {loading ? (
@@ -176,8 +186,8 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {leads.map((lead) => (
-                    <TableRow key={lead.id}>
+                  {leads.map((lead, index) => (
+                    <TableRow key={lead.id} className="fade-in hover:bg-white/[0.03] transition-colors" style={{ animationDelay: `${index * 0.03}s` }}>
                       <TableCell className="font-medium text-text-primary">{lead.name}</TableCell>
                       <TableCell className="text-text-secondary">{lead.email || "—"}</TableCell>
                       <TableCell className="text-text-secondary">{lead.phone || "—"}</TableCell>
