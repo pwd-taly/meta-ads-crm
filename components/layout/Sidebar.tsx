@@ -1,71 +1,42 @@
 "use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Users,
-  BarChart3,
-  Settings,
-  LogOut,
-  Zap,
-} from "lucide-react";
+import { BarChart3, Settings, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const nav = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/leads", label: "Leads", icon: Users },
-  { href: "/ads", label: "Ads Analytics", icon: BarChart3 },
-  { href: "/settings", label: "Settings", icon: Settings },
-];
 
 export function Sidebar() {
   const pathname = usePathname();
 
-  return (
-    <aside className="flex flex-col w-60 min-h-screen bg-[#0A0A0A] text-white">
-      {/* Logo */}
-      <div className="flex items-center gap-2.5 px-6 py-5 border-b border-white/10">
-        <div className="w-8 h-8 rounded-lg bg-[#1877F2] flex items-center justify-center">
-          <Zap className="w-4 h-4 text-white" />
-        </div>
-        <span className="font-semibold text-sm tracking-tight">Meta Ads CRM</span>
-      </div>
+  const links = [
+    { href: "/", label: "Dashboard", icon: BarChart3 },
+    { href: "/ads", label: "Ads", icon: BarChart3 },
+    { href: "/leads", label: "Leads", icon: Users },
+    { href: "/settings", label: "Settings", icon: Settings },
+  ];
 
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-1">
-        {nav.map(({ href, label, icon: Icon }) => {
-          const active =
-            href === "/" ? pathname === "/" : pathname.startsWith(href);
+  return (
+    <aside className="w-60 border-r border-border bg-background h-screen overflow-y-auto">
+      <nav className="flex flex-col p-6 gap-2">
+        {links.map(({ href, label, icon: Icon }) => {
+          const isActive = pathname === href || pathname.startsWith(href + "/");
           return (
             <Link
               key={href}
               href={href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
-                active
-                  ? "bg-[#1877F2] text-white"
-                  : "text-white/60 hover:text-white hover:bg-white/10"
+                "flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 text-sm font-medium",
+                isActive
+                  ? "bg-surface text-text-primary border-l-4 border-primary-400"
+                  : "text-text-secondary hover:bg-surface/50 hover:text-text-primary"
               )}
             >
-              <Icon className="w-4 h-4 flex-shrink-0" />
+              <Icon size={20} />
               {label}
             </Link>
           );
         })}
       </nav>
-
-      {/* Logout */}
-      <div className="px-3 py-4 border-t border-white/10">
-        <form action="/api/auth/logout" method="POST">
-          <button
-            type="submit"
-            className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/60 hover:text-white hover:bg-white/10 transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </button>
-        </form>
-      </div>
     </aside>
   );
 }
