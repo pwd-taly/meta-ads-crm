@@ -100,8 +100,8 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={loading || !password}
-            className="w-full btn-gradient disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl text-sm"
+            disabled={loading}
+            className="w-full btn-gradient disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl text-sm cursor-pointer"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
