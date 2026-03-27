@@ -11,6 +11,7 @@ const config: Config = {
         background: "#0f1117",
         surface: "#161b22",
         border: "#30363d",
+        foreground: "#e6edf3",
         "text-primary": "#e6edf3",
         "text-secondary": "#8b949e",
         primary: {
