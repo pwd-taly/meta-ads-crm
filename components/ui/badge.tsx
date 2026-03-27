@@ -1,26 +1,40 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
 
-interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: "default" | "secondary" | "destructive" | "outline";
-}
+const badgeVariants = cva(
+  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors duration-200",
+  {
+    variants: {
+      variant: {
+        default:
+          "border border-transparent bg-primary-400 text-white",
+        secondary:
+          "border border-transparent bg-gray-700 text-text-primary",
+        success:
+          "border border-transparent bg-success text-white",
+        warning:
+          "border border-transparent bg-warning text-white",
+        danger:
+          "border border-transparent bg-danger text-white",
+        outline:
+          "text-text-primary border border-border",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
 
-function Badge({ className, variant = "default", ...props }: BadgeProps) {
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof badgeVariants> {}
+
+function Badge({ className, variant, ...props }: BadgeProps) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors",
-        {
-          default: "border-transparent bg-primary text-primary-foreground",
-          secondary: "border-transparent bg-secondary text-secondary-foreground",
-          destructive: "border-transparent bg-destructive text-destructive-foreground",
-          outline: "text-foreground",
-        }[variant],
-        className
-      )}
-      {...props}
-    />
-  );
+    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+  )
 }
 
-export { Badge };
+export { Badge, badgeVariants }
