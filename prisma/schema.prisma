@@ -50,6 +50,8 @@ model Organization {
   messageTemplates MessageTemplate[]
   messages         MessageQueue[]
   messageLogs      MessageLog[]
+  customFields     CustomField[]
+  workflows        Workflow[]
 }
 
 model User {
@@ -113,6 +115,7 @@ model Campaign {
   clicks          Int?
   conversions     Int?
   syncedAt        DateTime?
+  customValues    Json           @default("{}")
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
@@ -173,6 +176,7 @@ model Lead {
   saleAmount      Float?
   notes           String?
   source          String     @default("webhook")
+  customValues    Json       @default("{}")
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
   orgId           String
@@ -277,4 +281,70 @@ model Settings {
   waMessageTemplateEs String?  @default("Hola {{name}}, ¡gracias por tu interés! Me encantaría compartir más detalles contigo.")
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+}
+
+model CustomField {
+  id          String   @id @default(cuid())
+  orgId       String
+  entityType  String   // "lead" | "campaign"
+  name        String
+  type        String   // "text" | "number" | "email" | "select" | "date" | "checkbox" | "textarea"
+  isRequired  Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  config      Json?    // for select options, validation rules
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, entityType, name])
+  @@index([orgId, entityType])
+  @@index([orgId, createdAt])
+}
+
+model Workflow {
+  id                String               @id @default(cuid())
+  orgId             String
+  name              String
+  description       String?
+  entityType        String               // "lead" | "campaign"
+  isActive          Boolean              @default(false)
+  trigger           Json                 // {type, config}
+  conditions        Json                 @default("[]")
+  conditionLogic    String               @default("AND") // "AND" | "OR"
+  actions           Json                 @default("[]")
+  createdBy         String
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  // Relations
+  org        Organization        @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  executions WorkflowExecution[]
+
+  @@index([orgId, isActive])
+  @@index([orgId, entityType])
+}
+
+model WorkflowExecution {
+  id              String    @id @default(cuid())
+  workflowId      String
+  orgId           String
+  entityId        String
+  entityType      String    // "lead" | "campaign"
+  triggeredAt     DateTime  @default(now())
+  completedAt     DateTime?
+  status          String    @default("pending") // "pending" | "completed" | "failed"
+  conditionsMet   Boolean?
+  actionResults   Json      @default("[]")
+  errorMessage    String?
+  retryCount      Int       @default(0)
+
+  // Relations
+  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  @@index([workflowId, triggeredAt])
+  @@index([orgId, completedAt])
+  @@index([entityId, entityType])
 }
