@@ -16,3 +16,6 @@
 {"timestamp":"2026-03-28T20:16:25.461+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
 {"timestamp":"2026-03-28T20:16:25.463+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
 {"timestamp":"2026-03-28T20:16:25.464+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:17:54.483+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:17:54.485+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:17:54.486+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
