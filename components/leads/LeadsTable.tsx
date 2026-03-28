@@ -98,26 +98,27 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
   return (
     <div className="space-y-4">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-col md:flex-row gap-3">
         {/* Search */}
-        <div className="relative flex-1 min-w-[200px] max-w-sm">
+        <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
           <input
+            id="search"
             type="text"
             placeholder="Search name, phone, email…"
             value={search}
             onChange={handleSearch}
-            className="w-full pl-9 pr-4 h-9 rounded-xl border border-white/[0.08] bg-white/[0.04] text-zinc-300 placeholder:text-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 transition-colors"
+            className="w-full pl-9 pr-4 h-12 md:h-9 rounded-xl border border-white/[0.08] bg-white/[0.04] text-zinc-300 placeholder:text-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 transition-colors"
           />
         </div>
 
-        {/* Status tabs */}
-        <div className="flex gap-0.5 bg-white/[0.04] border border-white/[0.06] rounded-xl p-1">
+        {/* Status tabs - scrollable on mobile */}
+        <div className="flex gap-0.5 bg-white/[0.04] border border-white/[0.06] rounded-xl p-1 overflow-x-auto md:overflow-visible">
           {STATUSES.map((s) => (
             <button
               key={s}
               onClick={() => handleStatusFilter(s)}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+              className={`px-3 py-1 md:py-1 h-10 md:h-auto rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
                 statusFilter === s
                   ? "bg-white/[0.1] text-white shadow-sm"
                   : "text-zinc-500 hover:text-zinc-300"
@@ -132,7 +133,7 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
         <select
           value={campaignFilter}
           onChange={(e) => handleCampaignFilter(e.target.value)}
-          className="h-9 px-3 rounded-xl border border-white/[0.08] bg-white/[0.04] text-zinc-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          className="h-12 md:h-9 px-3 rounded-xl border border-white/[0.08] bg-white/[0.04] text-zinc-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
         >
           <option value="all" className="bg-[#1a1a1a]">All Campaigns</option>
           {campaigns.map((c) => (
@@ -140,13 +141,14 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
           ))}
         </select>
 
-        <div className="ml-auto flex gap-2">
+        <div className="flex gap-2">
           <button
             onClick={() => setShowImport(true)}
-            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl border border-white/[0.08] text-zinc-400 text-sm font-medium hover:bg-white/[0.04] hover:text-white transition-colors"
+            className="inline-flex items-center justify-center gap-1.5 h-12 md:h-9 px-4 rounded-xl border border-white/[0.08] text-zinc-400 text-sm font-medium hover:bg-white/[0.04] hover:text-white transition-colors flex-1 md:flex-none"
           >
             <Upload className="w-3.5 h-3.5" />
-            Import CSV
+            <span className="hidden sm:inline">Import CSV</span>
+            <span className="sm:hidden">Import</span>
           </button>
         </div>
       </div>
@@ -171,57 +173,106 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
             <p className="text-xs text-zinc-600">Connect Meta or import a CSV to get started.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <div className="rounded-lg border border-border overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Phone</TableHead>
-                    <TableHead>Campaign</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Added</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {leads.map((lead, index) => (
-                    <TableRow key={lead.id} className="fade-in hover:bg-white/[0.03] transition-colors" style={{ animationDelay: `${index * 0.03}s` }}>
-                      <TableCell className="font-medium text-text-primary">{lead.name}</TableCell>
-                      <TableCell className="text-text-secondary">{lead.email || "—"}</TableCell>
-                      <TableCell className="text-text-secondary">{lead.phone || "—"}</TableCell>
-                      <TableCell className="text-sm text-text-secondary">{lead.campaignName || "—"}</TableCell>
-                      <TableCell>
-                        <Badge variant={statusVariant[lead.status] || "default"}>
-                          {lead.status.charAt(0).toUpperCase() + lead.status.slice(1)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-sm text-text-secondary">
-                        {formatDistanceToNow(new Date(lead.createdAt), { addSuffix: true })}
-                      </TableCell>
-                      <TableCell className="text-right space-x-2">
-                        <Link href={`/leads/${lead.id}`}>
-                          <Button variant="ghost" size="sm">
-                            View
-                          </Button>
-                        </Link>
-                        {lead.phone && (
-                          <WhatsAppButton
-                            phone={lead.phone}
-                            name={lead.name}
-                            template={waTemplate}
-                            templateEs={waTemplateEs}
-                            size="sm"
-                          />
-                        )}
-                      </TableCell>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <div className="rounded-lg border border-border overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Campaign</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Added</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {leads.map((lead, index) => (
+                      <TableRow key={lead.id} className="fade-in hover:bg-white/[0.03] transition-colors" style={{ animationDelay: `${index * 0.03}s` }}>
+                        <TableCell className="font-medium text-text-primary">{lead.name}</TableCell>
+                        <TableCell className="text-text-secondary">{lead.email || "—"}</TableCell>
+                        <TableCell className="text-text-secondary">{lead.phone || "—"}</TableCell>
+                        <TableCell className="text-sm text-text-secondary">{lead.campaignName || "—"}</TableCell>
+                        <TableCell>
+                          <Badge variant={statusVariant[lead.status] || "default"}>
+                            {lead.status.charAt(0).toUpperCase() + lead.status.slice(1)}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-sm text-text-secondary">
+                          {formatDistanceToNow(new Date(lead.createdAt), { addSuffix: true })}
+                        </TableCell>
+                        <TableCell className="text-right space-x-2">
+                          <Link href={`/leads/${lead.id}`}>
+                            <Button variant="ghost" size="sm">
+                              View
+                            </Button>
+                          </Link>
+                          {lead.phone && (
+                            <WhatsAppButton
+                              phone={lead.phone}
+                              name={lead.name}
+                              template={waTemplate}
+                              templateEs={waTemplateEs}
+                              size="sm"
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
-          </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4 p-4">
+              {leads.map((lead, index) => (
+                <div
+                  key={lead.id}
+                  className="p-4 bg-white/[0.02] border border-white/[0.06] rounded-lg fade-in"
+                  style={{ animationDelay: `${index * 0.03}s` }}
+                >
+                  <div className="flex justify-between items-start gap-2 mb-3">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-text-primary">{lead.name}</h3>
+                      <p className="text-xs text-text-secondary mt-1">{lead.email || lead.phone || "No contact"}</p>
+                    </div>
+                    <Badge variant={statusVariant[lead.status] || "default"}>
+                      {lead.status.charAt(0).toUpperCase() + lead.status.slice(1)}
+                    </Badge>
+                  </div>
+
+                  {lead.campaignName && (
+                    <p className="text-xs text-text-secondary mb-2">Campaign: {lead.campaignName}</p>
+                  )}
+
+                  <p className="text-xs text-text-secondary mb-4">
+                    {formatDistanceToNow(new Date(lead.createdAt), { addSuffix: true })}
+                  </p>
+
+                  <div className="flex gap-2">
+                    <Link href={`/leads/${lead.id}`} className="flex-1">
+                      <Button variant="ghost" size="sm" className="w-full h-10">
+                        View
+                      </Button>
+                    </Link>
+                    {lead.phone && (
+                      <WhatsAppButton
+                        phone={lead.phone}
+                        name={lead.name}
+                        template={waTemplate}
+                        templateEs={waTemplateEs}
+                        size="sm"
+                      />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 
