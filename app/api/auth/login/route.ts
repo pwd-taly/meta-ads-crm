@@ -1,82 +1,95 @@
 import { NextRequest, NextResponse } from "next/server";
-import { signToken } from "@/lib/auth";
-import { timingSafeEqual } from "crypto";
-import { checkRateLimit, recordFailedAttempt, resetAttempts } from "@/lib/rate-limit";
+import { prisma } from "@/lib/db";
+import { encodeJWT, verifyPassword } from "@/lib/db/auth";
 
-function safeCompare(a: string, b: string): boolean {
+export async function POST(request: NextRequest) {
   try {
-    const bufA = Buffer.from(a);
-    const bufB = Buffer.from(b);
-    if (bufA.length !== bufB.length) {
-      // Still do comparison to avoid timing leak on length
-      timingSafeEqual(bufA, bufA);
-      return false;
+    const payload = await request.json();
+    const { email, password } = payload;
+
+    // Validate input
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Email and password are required" },
+        { status: 400 }
+      );
     }
-    return timingSafeEqual(bufA, bufB);
-  } catch {
-    return false;
-  }
-}
 
-export async function POST(req: NextRequest) {
-  // Get real IP (Railway passes it via x-forwarded-for)
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip") ||
-    "unknown";
+    // Find user
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
 
-  // Rate limit check
-  const limit = checkRateLimit(ip);
-  if (!limit.allowed) {
-    return NextResponse.json(
-      { error: `Too many attempts. Try again in ${Math.ceil((limit.retryAfterSeconds || 1800) / 60)} minutes.` },
+    if (!user) {
+      return NextResponse.json(
+        { error: "Invalid email or password" },
+        { status: 401 }
+      );
+    }
+
+    // Verify password
+    const passwordValid = await verifyPassword(password, user.passwordHash);
+
+    if (!passwordValid) {
+      return NextResponse.json(
+        { error: "Invalid email or password" },
+        { status: 401 }
+      );
+    }
+
+    // Get all orgs user is member of
+    const memberships = await prisma.organizationMember.findMany({
+      where: { userId: user.id },
+      include: { org: true },
+    });
+
+    if (memberships.length === 0) {
+      return NextResponse.json(
+        { error: "User has no organization" },
+        { status: 401 }
+      );
+    }
+
+    // Select primary org (first one, or user can specify in future)
+    const primary = memberships[0];
+
+    // Create JWT for primary org
+    const token = await encodeJWT({
+      userId: user.id,
+      orgId: primary.orgId,
+      email: user.email,
+      role: primary.role,
+    });
+
+    // Set cookie
+    const response = NextResponse.json(
       {
-        status: 429,
-        headers: { "Retry-After": String(limit.retryAfterSeconds || 1800) },
-      }
+        user: { id: user.id, email: user.email },
+        orgs: memberships.map((m) => ({
+          orgId: m.orgId,
+          orgName: m.org.name,
+          role: m.role,
+        })),
+        message: memberships.length > 1
+          ? "You belong to multiple organizations. Use POST /api/organizations/switch-account to change."
+          : "Login successful",
+      },
+      { status: 200 }
+    );
+
+    response.cookies.set("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60,
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Login error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
     );
   }
-
-  let body: { password?: string };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
-  }
-
-  const { password } = body;
-
-  if (!password || typeof password !== "string") {
-    return NextResponse.json({ error: "Password required" }, { status: 400 });
-  }
-
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) {
-    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
-  }
-
-  // Timing-safe comparison — prevents timing attacks
-  const valid = safeCompare(password, adminPassword);
-
-  if (!valid) {
-    recordFailedAttempt(ip);
-    // Generic message — don't reveal whether password exists
-    return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
-  }
-
-  // Success — clear failed attempts
-  resetAttempts(ip);
-
-  const token = await signToken({ role: "admin" });
-
-  const res = NextResponse.json({ ok: true });
-  res.cookies.set("auth_token", token, {
-    httpOnly: true,
-    sameSite: "strict",          // strict: never sent cross-site
-    maxAge: 60 * 60 * 24,        // 24 hours (not 7 days)
-    path: "/",
-    secure: true,                // always secure in production
-  });
-
-  return res;
 }
