@@ -41,18 +41,18 @@ model Organization {
   updatedAt DateTime @updatedAt
 
   // Relations
-  members              OrganizationMember[]
-  leads                Lead[]
-  campaigns            Campaign[]
-  metaAccounts         MetaAdAccount[]
-  reportSchedules      ReportSchedule[]
-  activities           LeadActivity[]
-  messageTemplates     MessageTemplate[]
-  messages             MessageQueue[]
-  messageLogs          MessageLog[]
-  customFields         CustomField[]
-  workflows            Workflow[]
-  workflowExecutions   WorkflowExecution[]
+  members            OrganizationMember[]
+  leads              Lead[]
+  campaigns          Campaign[]
+  metaAccounts       MetaAdAccount[]
+  reportSchedules    ReportSchedule[]
+  activities         LeadActivity[]
+  messageTemplates   MessageTemplate[]
+  messages           MessageQueue[]
+  messageLogs        MessageLog[]
+  customFields       CustomField[]
+  workflows          Workflow[]
+  workflowExecutions WorkflowExecution[]
 }
 
 model User {
@@ -63,8 +63,10 @@ model User {
   updatedAt    DateTime @updatedAt
 
   // Relations
-  memberships      OrganizationMember[]
-  messageTemplates MessageTemplate[]
+  memberships         OrganizationMember[]
+  messageTemplates    MessageTemplate[]
+  customFieldsCreated CustomField[]
+  workflowsCreated    Workflow[]
 }
 
 model OrganizationMember {
@@ -131,14 +133,14 @@ model Campaign {
 }
 
 model ReportSchedule {
-  id           String   @id @default(cuid())
-  orgId        String
-  frequency    String   // "daily" | "weekly" | "monthly"
-  dayOfWeek    Int?     // 0-6 for weekly
-  dayOfMonth   Int?     // 1-31 for monthly
-  recipients   String[] // email addresses
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id         String   @id @default(cuid())
+  orgId      String
+  frequency  String // "daily" | "weekly" | "monthly"
+  dayOfWeek  Int? // 0-6 for weekly
+  dayOfMonth Int? // 1-31 for monthly
+  recipients String[] // email addresses
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
 
@@ -209,17 +211,17 @@ model MessageTemplate {
   id        String   @id @default(cuid())
   orgId     String
   name      String
-  channel   String   // "email" | "sms" | "whatsapp"
-  subject   String?  // email only
+  channel   String // "email" | "sms" | "whatsapp"
+  subject   String? // email only
   body      String
-  variables Json?    // { required: ["firstName"], optional: ["linkUrl"] }
+  variables Json? // { required: ["firstName"], optional: ["linkUrl"] }
   createdBy String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  organization Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
   // creator relation with RESTRICT - preserves template history if creator deleted
-  creator      User         @relation(fields: [createdBy], references: [id], onDelete: Restrict)
+  creator      User           @relation(fields: [createdBy], references: [id], onDelete: Restrict)
   messages     MessageQueue[]
 
   @@index([orgId, channel])
@@ -227,24 +229,24 @@ model MessageTemplate {
 }
 
 model MessageQueue {
-  id               String   @id @default(cuid())
-  orgId            String
-  leadId           String
-  channel          String   // "email" | "sms" | "whatsapp"
-  templateId       String?
-  recipientEmail   String?
-  recipientPhone   String?
-  subject          String?  // for email
-  body             String
-  scheduledFor     DateTime?
-  sentAt           DateTime?
-  status           String   // "pending" | "sending" | "sent" | "failed" | "bounced"
-  deliveryStatus   String?  // "delivered" | "bounced" | "complained" | "dropped" (email), "queued" | "failed" | "undelivered" (sms)
-  retryCount       Int      @default(0)
-  failureReason    String?
-  externalId       String?  // SendGrid/Twilio message ID
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id             String    @id @default(cuid())
+  orgId          String
+  leadId         String
+  channel        String // "email" | "sms" | "whatsapp"
+  templateId     String?
+  recipientEmail String?
+  recipientPhone String?
+  subject        String? // for email
+  body           String
+  scheduledFor   DateTime?
+  sentAt         DateTime?
+  status         String // "pending" | "sending" | "sent" | "failed" | "bounced"
+  deliveryStatus String? // "delivered" | "bounced" | "complained" | "dropped" (email), "queued" | "failed" | "undelivered" (sms)
+  retryCount     Int       @default(0)
+  failureReason  String?
+  externalId     String? // SendGrid/Twilio message ID
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   organization Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
   lead         Lead             @relation(fields: [leadId], references: [id], onDelete: Cascade)
@@ -257,13 +259,13 @@ model MessageQueue {
 }
 
 model MessageLog {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   queueId   String
   orgId     String
-  status    String   // "sent" | "failed" | "bounced"
+  status    String // "sent" | "failed" | "bounced"
   sentAt    DateTime?
-  metadata  Json?    // { providerResponse, bounceReason, etc }
-  timestamp DateTime @default(now())
+  metadata  Json? // { providerResponse, bounceReason, etc }
+  timestamp DateTime  @default(now())
 
   organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
   queue        MessageQueue @relation(fields: [queueId], references: [id], onDelete: Cascade)
@@ -285,20 +287,21 @@ model Settings {
 }
 
 model CustomField {
-  id          String   @id @default(cuid())
-  orgId       String
-  entityType  String   // "lead" | "campaign"
-  name        String
-  type        String   // "text" | "number" | "email" | "select" | "date" | "checkbox" | "textarea"
-  isRequired  Boolean  @default(false)
-  sortOrder   Int      @default(0)
-  config      Json?    // for select options, validation rules
-  createdBy   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  orgId      String
+  entityType String // "lead" | "campaign"
+  name       String
+  type       String // "text" | "number" | "email" | "select" | "date" | "checkbox" | "textarea"
+  isRequired Boolean  @default(false)
+  sortOrder  Int      @default(0)
+  config     Json? // for select options, validation rules
+  createdBy  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   // Relations
-  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  org     Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator User         @relation(fields: [createdBy], references: [id], onDelete: Restrict)
 
   @@unique([orgId, entityType, name])
   @@index([orgId, entityType])
@@ -306,22 +309,23 @@ model CustomField {
 }
 
 model Workflow {
-  id                String               @id @default(cuid())
-  orgId             String
-  name              String
-  description       String?
-  entityType        String               // "lead" | "campaign"
-  isActive          Boolean              @default(false)
-  trigger           Json                 // {type, config}
-  conditions        Json                 @default("[]")
-  conditionLogic    String               @default("AND") // "AND" | "OR"
-  actions           Json                 @default("[]")
-  createdBy         String
-  createdAt         DateTime             @default(now())
-  updatedAt         DateTime             @updatedAt
+  id             String   @id @default(cuid())
+  orgId          String
+  name           String
+  description    String?
+  entityType     String // "lead" | "campaign"
+  isActive       Boolean  @default(false)
+  trigger        Json // {type, config}
+  conditions     Json     @default("[]")
+  conditionLogic String   @default("AND") // "AND" | "OR"
+  actions        Json     @default("[]")
+  createdBy      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Relations
   org        Organization        @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator    User                @relation(fields: [createdBy], references: [id], onDelete: Restrict)
   executions WorkflowExecution[]
 
   @@index([orgId, isActive])
@@ -329,22 +333,22 @@ model Workflow {
 }
 
 model WorkflowExecution {
-  id              String    @id @default(cuid())
-  workflowId      String
-  orgId           String
-  entityId        String
-  entityType      String    // "lead" | "campaign"
-  triggeredAt     DateTime  @default(now())
-  completedAt     DateTime?
-  status          String    @default("pending") // "pending" | "completed" | "failed"
-  conditionsMet   Boolean?
-  actionResults   Json      @default("[]")
-  errorMessage    String?
-  retryCount      Int       @default(0)
-  createdAt       DateTime  @default(now())
+  id            String    @id @default(cuid())
+  workflowId    String
+  orgId         String
+  entityId      String
+  entityType    String // "lead" | "campaign"
+  triggeredAt   DateTime  @default(now())
+  completedAt   DateTime?
+  status        String    @default("pending") // "pending" | "completed" | "failed"
+  conditionsMet Boolean?
+  actionResults Json      @default("[]")
+  errorMessage  String?
+  retryCount    Int       @default(0)
+  createdAt     DateTime  @default(now())
 
   // Relations
-  workflow Workflow    @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflow Workflow     @relation(fields: [workflowId], references: [id], onDelete: Cascade)
   org      Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
 
   @@index([workflowId, triggeredAt])
