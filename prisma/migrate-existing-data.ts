@@ -7,7 +7,9 @@ async function main() {
   console.log("Starting data migration for multi-tenancy...");
 
   // Check if migration already ran
-  const existingOrg = await prisma.organization.findFirst();
+  const existingOrg = await prisma.organization.findUnique({
+    where: { slug: "default-org" },
+  });
   if (existingOrg) {
     console.log("Migration already completed. Exiting.");
     return;
@@ -77,4 +79,7 @@ main()
   .catch((error) => {
     console.error("Migration failed:", error);
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });
