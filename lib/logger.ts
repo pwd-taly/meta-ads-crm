@@ -4,9 +4,16 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 // Ensure log directory exists
-const logDir = '/var/log/meta-ads-crm';
+const logDir = process.env.NODE_ENV === 'production'
+  ? '/var/log/meta-ads-crm'
+  : './logs';
+
 if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir, { recursive: true });
+  try {
+    fs.mkdirSync(logDir, { recursive: true });
+  } catch (error) {
+    console.warn(`Failed to create log directory ${logDir}:`, error);
+  }
 }
 
 // Custom JSON format for structured logging
@@ -29,36 +36,45 @@ const jsonFormat = winston.format.combine(
   })
 );
 
+// Create transports safely
+const transports: any[] = [];
+
+try {
+  // App logs (info and above)
+  transports.push(new DailyRotateFile({
+    filename: path.join(logDir, 'app-%DATE%.log'),
+    datePattern: 'YYYY-MM-DD',
+    maxSize: '100m',
+    maxFiles: '30d',
+    level: 'info',
+  }));
+
+  // Job-specific logs
+  transports.push(new DailyRotateFile({
+    filename: path.join(logDir, 'jobs-%DATE%.log'),
+    datePattern: 'YYYY-MM-DD',
+    maxSize: '100m',
+    maxFiles: '30d',
+    level: 'info',
+  }));
+
+  // Error logs (errors only)
+  transports.push(new DailyRotateFile({
+    filename: path.join(logDir, 'errors-%DATE%.log'),
+    datePattern: 'YYYY-MM-DD',
+    maxSize: '100m',
+    maxFiles: '30d',
+    level: 'error',
+  }));
+} catch (error) {
+  console.warn('Failed to initialize file transports:', error);
+}
+
 // Create logger instance
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
   format: jsonFormat,
-  transports: [
-    // App logs (info and above)
-    new DailyRotateFile({
-      filename: path.join(logDir, 'app-%DATE%.log'),
-      datePattern: 'YYYY-MM-DD',
-      maxSize: '100m',
-      maxFiles: '30d',
-      level: 'info',
-    }),
-    // Job-specific logs
-    new DailyRotateFile({
-      filename: path.join(logDir, 'jobs-%DATE%.log'),
-      datePattern: 'YYYY-MM-DD',
-      maxSize: '100m',
-      maxFiles: '30d',
-      level: 'info',
-    }),
-    // Error logs (errors only)
-    new DailyRotateFile({
-      filename: path.join(logDir, 'errors-%DATE%.log'),
-      datePattern: 'YYYY-MM-DD',
-      maxSize: '100m',
-      maxFiles: '30d',
-      level: 'error',
-    }),
-  ],
+  transports,
 });
 
 // Also log to console in development
