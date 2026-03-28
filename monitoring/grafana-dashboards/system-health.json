@@ -1,0 +1,54 @@
+{
+  "dashboard": {
+    "title": "System Health",
+    "tags": ["system", "infrastructure"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "CPU Usage (%)",
+        "targets": [
+          {
+            "expr": "rate(node_cpu_seconds_total[5m]) * 100"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "title": "Memory Available (MB)",
+        "targets": [
+          {
+            "expr": "node_memory_MemAvailable_bytes / 1024 / 1024"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "title": "Disk Usage (%)",
+        "targets": [
+          {
+            "expr": "(1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) * 100"
+          }
+        ],
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "title": "Network I/O (bytes/sec)",
+        "targets": [
+          {
+            "expr": "rate(node_network_receive_bytes_total[5m])",
+            "legendFormat": "In"
+          },
+          {
+            "expr": "rate(node_network_transmit_bytes_total[5m])",
+            "legendFormat": "Out"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16}
+      }
+    ]
+  }
+}

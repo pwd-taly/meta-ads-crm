@@ -1,0 +1,49 @@
+{
+  "dashboard": {
+    "title": "API Performance",
+    "tags": ["api", "performance"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "Request Throughput (req/sec)",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total[1m])"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "title": "Response Time by Endpoint",
+        "targets": [
+          {
+            "expr": "http_request_duration_seconds"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "title": "Error Rate by Endpoint",
+        "targets": [
+          {
+            "expr": "rate(http_requests_errors_total[5m]) / rate(http_requests_total[5m]) * 100"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "title": "Error Types",
+        "targets": [
+          {
+            "expr": "http_requests_errors_total"
+          }
+        ],
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      }
+    ]
+  }
+}
