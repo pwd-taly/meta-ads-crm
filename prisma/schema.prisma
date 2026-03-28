@@ -168,3 +168,13 @@ model Lead {
   @@index([orgId, status])
   @@index([orgId, createdAt])
 }
+
+model Settings {
+  id                 Int      @id @default(1)
+  webhookVerifyToken String?
+  metaAccessToken    String?
+  metaAdAccountId    String?
+  waMessageTemplate  String?  @default("Hi {{name}}, thanks for your interest! I'd love to share more details with you.")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
