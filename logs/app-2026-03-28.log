@@ -125,3 +125,213 @@
 {"timestamp":"2026-03-28T20:17:54.486+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-456"}
 {"timestamp":"2026-03-28T20:17:54.486+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-789"}
 {"timestamp":"2026-03-28T20:17:54.486+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:18:08.591+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:18:08.585+03:00","level":"info","message":"Message enqueued","messageId":"msg-1","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:18:08.587+03:00","level":"info","message":"Message enqueued","messageId":"msg-2","orgId":"org-1","channel":"sms","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:18:08.588+03:00","level":"info","message":"Message enqueued","messageId":"msg-3","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:18:08.588+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":2}
+{"timestamp":"2026-03-28T20:18:08.589+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":0}
+{"timestamp":"2026-03-28T20:18:08.589+03:00","level":"info","message":"Fetched pending messages","orgId":"org-2","count":0}
+{"timestamp":"2026-03-28T20:18:08.589+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent","externalId":"ext-123"}
+{"timestamp":"2026-03-28T20:18:08.590+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:18:08.590+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:18:08.590+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:19:08.590Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:18:08.591+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:19:08.591Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:18:08.591+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Bounced"}
+{"timestamp":"2026-03-28T20:18:08.591+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Permanent failure"}
+{"timestamp":"2026-03-28T20:18:08.591+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:18:08.591+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:18:08.591+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:19:08.591Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:18:08.592+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":2,"nextRetryTime":"2026-03-28T17:23:08.592Z","delayMinutes":5}
+{"timestamp":"2026-03-28T20:18:08.592+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":3,"nextRetryTime":"2026-03-28T17:33:08.592Z","delayMinutes":15}
+{"timestamp":"2026-03-28T20:18:08.593+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:18:08.593+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:18:08.593+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:18:08.595+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-123"}
+{"timestamp":"2026-03-28T20:18:08.595+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-456"}
+{"timestamp":"2026-03-28T20:18:08.596+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-789"}
+{"timestamp":"2026-03-28T20:18:08.596+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:18:08.596+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-123"}
+{"timestamp":"2026-03-28T20:18:08.596+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-456"}
+{"timestamp":"2026-03-28T20:18:08.597+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-789"}
+{"timestamp":"2026-03-28T20:18:08.597+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:18:11.851+03:00","level":"info","message":"Message enqueued","messageId":"msg-1","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:18:11.857+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:18:11.853+03:00","level":"info","message":"Message enqueued","messageId":"msg-2","orgId":"org-1","channel":"sms","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:18:11.854+03:00","level":"info","message":"Message enqueued","messageId":"msg-3","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:18:11.855+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":2}
+{"timestamp":"2026-03-28T20:18:11.856+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":0}
+{"timestamp":"2026-03-28T20:18:11.856+03:00","level":"info","message":"Fetched pending messages","orgId":"org-2","count":0}
+{"timestamp":"2026-03-28T20:18:11.856+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent","externalId":"ext-123"}
+{"timestamp":"2026-03-28T20:18:11.856+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:18:11.856+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:18:11.857+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:19:11.857Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:18:11.857+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:19:11.857Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:18:11.857+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Bounced"}
+{"timestamp":"2026-03-28T20:18:11.857+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Permanent failure"}
+{"timestamp":"2026-03-28T20:18:11.858+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:18:11.858+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:18:11.858+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:19:11.858Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:18:11.858+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":2,"nextRetryTime":"2026-03-28T17:23:11.858Z","delayMinutes":5}
+{"timestamp":"2026-03-28T20:18:11.858+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":3,"nextRetryTime":"2026-03-28T17:33:11.858Z","delayMinutes":15}
+{"timestamp":"2026-03-28T20:18:11.859+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:18:11.860+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:18:11.860+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:18:11.861+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-123"}
+{"timestamp":"2026-03-28T20:18:11.861+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-456"}
+{"timestamp":"2026-03-28T20:18:11.862+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-789"}
+{"timestamp":"2026-03-28T20:18:11.862+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:18:11.862+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-123"}
+{"timestamp":"2026-03-28T20:18:11.862+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-456"}
+{"timestamp":"2026-03-28T20:18:11.863+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-789"}
+{"timestamp":"2026-03-28T20:18:11.863+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:18:39.766+03:00","level":"info","message":"Message enqueued","messageId":"msg-1","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:18:39.768+03:00","level":"info","message":"Message enqueued","messageId":"msg-2","orgId":"org-1","channel":"sms","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:18:39.769+03:00","level":"info","message":"Message enqueued","messageId":"msg-3","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:18:39.769+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":2}
+{"timestamp":"2026-03-28T20:18:39.770+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":0}
+{"timestamp":"2026-03-28T20:18:39.770+03:00","level":"info","message":"Fetched pending messages","orgId":"org-2","count":0}
+{"timestamp":"2026-03-28T20:18:39.770+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent","externalId":"ext-123"}
+{"timestamp":"2026-03-28T20:18:39.771+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:18:39.771+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:18:39.771+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:19:39.771Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:18:39.771+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:19:39.771Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:18:39.772+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Bounced"}
+{"timestamp":"2026-03-28T20:18:39.772+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Permanent failure"}
+{"timestamp":"2026-03-28T20:18:39.772+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:18:39.772+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:18:39.772+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:19:39.772Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:18:39.773+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":2,"nextRetryTime":"2026-03-28T17:23:39.773Z","delayMinutes":5}
+{"timestamp":"2026-03-28T20:18:39.773+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":3,"nextRetryTime":"2026-03-28T17:33:39.773Z","delayMinutes":15}
+{"timestamp":"2026-03-28T20:18:39.773+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:18:39.775+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:18:39.776+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:18:39.776+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:18:39.777+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-123"}
+{"timestamp":"2026-03-28T20:18:39.778+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-456"}
+{"timestamp":"2026-03-28T20:18:39.778+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-789"}
+{"timestamp":"2026-03-28T20:18:39.778+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:18:39.778+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-123"}
+{"timestamp":"2026-03-28T20:18:39.779+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-456"}
+{"timestamp":"2026-03-28T20:18:39.779+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-789"}
+{"timestamp":"2026-03-28T20:18:39.779+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:19:21.646+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:19:21.639+03:00","level":"info","message":"Message enqueued","messageId":"msg-1","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:19:21.641+03:00","level":"info","message":"Message enqueued","messageId":"msg-2","orgId":"org-1","channel":"sms","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:19:21.642+03:00","level":"info","message":"Message enqueued","messageId":"msg-3","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:19:21.643+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":2}
+{"timestamp":"2026-03-28T20:19:21.644+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":0}
+{"timestamp":"2026-03-28T20:19:21.644+03:00","level":"info","message":"Fetched pending messages","orgId":"org-2","count":0}
+{"timestamp":"2026-03-28T20:19:21.644+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent","externalId":"ext-123"}
+{"timestamp":"2026-03-28T20:19:21.645+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:19:21.645+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:19:21.645+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:20:21.645Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:19:21.645+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:20:21.645Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:19:21.646+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Bounced"}
+{"timestamp":"2026-03-28T20:19:21.646+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Permanent failure"}
+{"timestamp":"2026-03-28T20:19:21.646+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:19:21.646+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:19:21.647+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:20:21.647Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:19:21.649+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":2,"nextRetryTime":"2026-03-28T17:24:21.649Z","delayMinutes":5}
+{"timestamp":"2026-03-28T20:19:21.649+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":3,"nextRetryTime":"2026-03-28T17:34:21.649Z","delayMinutes":15}
+{"timestamp":"2026-03-28T20:19:21.650+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:19:21.651+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:19:21.651+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:19:21.653+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-123"}
+{"timestamp":"2026-03-28T20:19:21.653+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-456"}
+{"timestamp":"2026-03-28T20:19:21.653+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-789"}
+{"timestamp":"2026-03-28T20:19:21.653+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:19:21.654+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-123"}
+{"timestamp":"2026-03-28T20:19:21.654+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-456"}
+{"timestamp":"2026-03-28T20:19:21.654+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-789"}
+{"timestamp":"2026-03-28T20:19:21.654+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:19:23.898+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:19:23.893+03:00","level":"info","message":"Message enqueued","messageId":"msg-1","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:19:23.894+03:00","level":"info","message":"Message enqueued","messageId":"msg-2","orgId":"org-1","channel":"sms","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:19:23.895+03:00","level":"info","message":"Message enqueued","messageId":"msg-3","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:19:23.896+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":2}
+{"timestamp":"2026-03-28T20:19:23.897+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":0}
+{"timestamp":"2026-03-28T20:19:23.897+03:00","level":"info","message":"Fetched pending messages","orgId":"org-2","count":0}
+{"timestamp":"2026-03-28T20:19:23.898+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent","externalId":"ext-123"}
+{"timestamp":"2026-03-28T20:19:23.898+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:19:23.898+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:19:23.898+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:20:23.898Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:19:23.899+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:20:23.899Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:19:23.899+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Bounced"}
+{"timestamp":"2026-03-28T20:19:23.899+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Permanent failure"}
+{"timestamp":"2026-03-28T20:19:23.899+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:19:23.900+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:19:23.900+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:20:23.900Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:19:23.900+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":2,"nextRetryTime":"2026-03-28T17:24:23.900Z","delayMinutes":5}
+{"timestamp":"2026-03-28T20:19:23.900+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":3,"nextRetryTime":"2026-03-28T17:34:23.900Z","delayMinutes":15}
+{"timestamp":"2026-03-28T20:19:23.900+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:19:23.901+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:19:23.901+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:19:23.902+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-123"}
+{"timestamp":"2026-03-28T20:19:23.903+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-456"}
+{"timestamp":"2026-03-28T20:19:23.903+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-789"}
+{"timestamp":"2026-03-28T20:19:23.903+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:19:23.903+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-123"}
+{"timestamp":"2026-03-28T20:19:23.904+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-456"}
+{"timestamp":"2026-03-28T20:19:23.904+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-789"}
+{"timestamp":"2026-03-28T20:19:23.904+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:19:52.456+03:00","level":"info","message":"Message enqueued","messageId":"msg-1","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:19:52.459+03:00","level":"info","message":"Message enqueued","messageId":"msg-2","orgId":"org-1","channel":"sms","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:19:52.461+03:00","level":"info","message":"Message enqueued","messageId":"msg-3","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:19:52.462+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":2}
+{"timestamp":"2026-03-28T20:19:52.466+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":0}
+{"timestamp":"2026-03-28T20:19:52.467+03:00","level":"info","message":"Fetched pending messages","orgId":"org-2","count":0}
+{"timestamp":"2026-03-28T20:19:52.467+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent","externalId":"ext-123"}
+{"timestamp":"2026-03-28T20:19:52.468+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:19:52.468+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:19:52.468+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:20:52.468Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:19:52.472+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:20:52.472Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:19:52.472+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Bounced"}
+{"timestamp":"2026-03-28T20:19:52.473+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Permanent failure"}
+{"timestamp":"2026-03-28T20:19:52.473+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:19:52.474+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:19:52.475+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:20:52.475Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:19:52.476+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":2,"nextRetryTime":"2026-03-28T17:24:52.476Z","delayMinutes":5}
+{"timestamp":"2026-03-28T20:19:52.477+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":3,"nextRetryTime":"2026-03-28T17:34:52.477Z","delayMinutes":15}
+{"timestamp":"2026-03-28T20:19:52.503+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:19:52.505+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:19:52.507+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:19:52.508+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:19:52.510+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-123"}
+{"timestamp":"2026-03-28T20:19:52.511+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-456"}
+{"timestamp":"2026-03-28T20:19:52.512+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-789"}
+{"timestamp":"2026-03-28T20:19:52.512+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:19:52.513+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-123"}
+{"timestamp":"2026-03-28T20:19:52.514+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-456"}
+{"timestamp":"2026-03-28T20:19:52.515+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-789"}
+{"timestamp":"2026-03-28T20:19:52.516+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:20:08.530+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:20:08.525+03:00","level":"info","message":"Message enqueued","messageId":"msg-1","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:20:08.526+03:00","level":"info","message":"Message enqueued","messageId":"msg-2","orgId":"org-1","channel":"sms","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:20:08.528+03:00","level":"info","message":"Message enqueued","messageId":"msg-3","orgId":"org-1","channel":"email","leadId":"lead-1"}
+{"timestamp":"2026-03-28T20:20:08.528+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":2}
+{"timestamp":"2026-03-28T20:20:08.529+03:00","level":"info","message":"Fetched pending messages","orgId":"org-1","count":0}
+{"timestamp":"2026-03-28T20:20:08.529+03:00","level":"info","message":"Fetched pending messages","orgId":"org-2","count":0}
+{"timestamp":"2026-03-28T20:20:08.529+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent","externalId":"ext-123"}
+{"timestamp":"2026-03-28T20:20:08.529+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:20:08.530+03:00","level":"info","message":"Message status updated","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:20:08.530+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:21:08.530Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:20:08.531+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:21:08.531Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:20:08.531+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Bounced"}
+{"timestamp":"2026-03-28T20:20:08.531+03:00","level":"info","message":"Message marked as failed","messageId":"msg-1","reason":"Permanent failure"}
+{"timestamp":"2026-03-28T20:20:08.531+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"sent"}
+{"timestamp":"2026-03-28T20:20:08.531+03:00","level":"info","message":"Delivery logged","logId":"log-1","messageId":"msg-1","status":"failed"}
+{"timestamp":"2026-03-28T20:20:08.532+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":1,"nextRetryTime":"2026-03-28T17:21:08.532Z","delayMinutes":1}
+{"timestamp":"2026-03-28T20:20:08.532+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":2,"nextRetryTime":"2026-03-28T17:25:08.532Z","delayMinutes":5}
+{"timestamp":"2026-03-28T20:20:08.532+03:00","level":"info","message":"Message scheduled for retry","messageId":"msg-1","retryCount":3,"nextRetryTime":"2026-03-28T17:35:08.532Z","delayMinutes":15}
+{"timestamp":"2026-03-28T20:20:08.532+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:20:08.532+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:20:08.533+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:20:08.534+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-123"}
+{"timestamp":"2026-03-28T20:20:08.534+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-456"}
+{"timestamp":"2026-03-28T20:20:08.534+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-789"}
+{"timestamp":"2026-03-28T20:20:08.535+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:20:08.535+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-123"}
+{"timestamp":"2026-03-28T20:20:08.535+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-456"}
+{"timestamp":"2026-03-28T20:20:08.535+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-789"}
+{"timestamp":"2026-03-28T20:20:08.535+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}

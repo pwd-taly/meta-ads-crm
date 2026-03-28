@@ -137,5 +137,43 @@ export const apiErrors5xxTotal = new Counter({
   help: 'Total 5xx server errors',
 });
 
+// Business Metrics - Messaging
+export const messagesSentTotal = new Counter({
+  name: 'messages_sent_total',
+  help: 'Total messages sent successfully',
+  labelNames: ['channel', 'org_id'],
+});
+
+export const messagesFailedTotal = new Counter({
+  name: 'messages_failed_total',
+  help: 'Total messages that failed to send',
+  labelNames: ['channel', 'reason', 'org_id'],
+});
+
+export const messagesDeliveryRate = new Gauge({
+  name: 'messages_delivery_rate',
+  help: 'Delivery rate percentage per channel',
+  labelNames: ['channel', 'org_id'],
+});
+
+export const messagesQueueDepth = new Gauge({
+  name: 'messages_queue_depth',
+  help: 'Number of pending messages in queue',
+  labelNames: ['channel', 'org_id'],
+});
+
+export const messageSendDurationSeconds = new Histogram({
+  name: 'message_send_duration_seconds',
+  help: 'Time taken to send a message',
+  labelNames: ['channel', 'org_id'],
+  buckets: [0.1, 0.5, 1, 2, 5, 10],
+});
+
+export const providerApiErrorsTotal = new Counter({
+  name: 'provider_api_errors_total',
+  help: 'Total API errors from messaging providers',
+  labelNames: ['provider', 'error_type', 'org_id'],
+});
+
 // Export register for Prometheus
 export { register };
