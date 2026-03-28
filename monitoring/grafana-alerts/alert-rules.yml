@@ -1,0 +1,52 @@
+# Alert rules for Grafana
+# These will be configured in Grafana UI after deployment
+
+# Critical Alerts (Email + Slack)
+- name: "Scoring Job Failed"
+  condition: "scoring_job_failures_total > 0"
+  frequency: "1m"
+  severity: "critical"
+  notifications: ["slack", "email"]
+
+- name: "Meta Sync Job Failed"
+  condition: "meta_sync_job_failures_total > 0"
+  frequency: "1m"
+  severity: "critical"
+  notifications: ["slack", "email"]
+
+- name: "API Error Rate >10%"
+  condition: "(rate(http_requests_errors_total[5m]) / rate(http_requests_total[5m])) > 0.1"
+  frequency: "5m"
+  severity: "critical"
+  notifications: ["slack", "email"]
+
+- name: "Disk Usage >85%"
+  condition: "(1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) > 0.85"
+  frequency: "5m"
+  severity: "critical"
+  notifications: ["slack", "email"]
+
+# Warning Alerts (Slack Only)
+- name: "API Error Rate >5%"
+  condition: "(rate(http_requests_errors_total[5m]) / rate(http_requests_total[5m])) > 0.05"
+  frequency: "5m"
+  severity: "warning"
+  notifications: ["slack"]
+
+- name: "Response Time P95 >2s"
+  condition: "histogram_quantile(0.95, http_request_duration_seconds_bucket) > 2"
+  frequency: "5m"
+  severity: "warning"
+  notifications: ["slack"]
+
+- name: "Disk Usage >70%"
+  condition: "(1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) > 0.70"
+  frequency: "5m"
+  severity: "warning"
+  notifications: ["slack"]
+
+- name: "Scoring Job Stale"
+  condition: "(time() - scoring_job_last_run_timestamp) > 5400"
+  frequency: "5m"
+  severity: "warning"
+  notifications: ["slack"]
