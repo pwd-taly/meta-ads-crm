@@ -5,11 +5,11 @@ import { requireAuth } from "@/lib/api-middleware";
 const handler = async (request: NextRequest, context: any) => {
   const { orgId } = context;
 
-  const statuses = ["new", "contacted", "booked", "closed", "lost"];
+  const statuses = ["new", "contacted", "booked", "closed", "lost"] as const;
 
   const statusCounts = await Promise.all(
     statuses.map((status) =>
-      prisma.lead.count({ where: { orgId, status } })
+      prisma.lead.count({ where: { orgId, status: status as any } })
     )
   );
 
