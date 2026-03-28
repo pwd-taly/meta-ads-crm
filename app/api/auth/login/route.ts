@@ -3,9 +3,19 @@ import { prisma } from "@/lib/db";
 import { encodeJWT, verifyPassword } from "@/lib/db/auth";
 
 export async function POST(request: NextRequest) {
+  let payload;
   try {
-    const payload = await request.json();
-    const { email, password } = payload;
+    payload = await request.json();
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Invalid JSON in request body" },
+      { status: 400 }
+    );
+  }
+
+  const { email, password } = payload;
+
+  try {
 
     // Validate input
     if (!email || !password) {
