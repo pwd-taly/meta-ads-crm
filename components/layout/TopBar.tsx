@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { OrgAccountSwitcher } from "@/components/org/OrgAccountSwitcher";
 
 export function TopBar() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export function TopBar() {
         Meta Ads CRM
       </div>
       <div className="flex items-center gap-4">
+        <OrgAccountSwitcher />
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.1]">
           <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-xs font-bold text-white">
             A
