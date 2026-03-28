@@ -41,12 +41,15 @@ model Organization {
   updatedAt DateTime @updatedAt
 
   // Relations
-  members         OrganizationMember[]
-  leads           Lead[]
-  campaigns       Campaign[]
-  metaAccounts    MetaAdAccount[]
-  reportSchedules ReportSchedule[]
-  activities      LeadActivity[]
+  members          OrganizationMember[]
+  leads            Lead[]
+  campaigns        Campaign[]
+  metaAccounts     MetaAdAccount[]
+  reportSchedules  ReportSchedule[]
+  activities       LeadActivity[]
+  messageTemplates MessageTemplate[]
+  messages         MessageQueue[]
+  messageLogs      MessageLog[]
 }
 
 model User {
@@ -57,7 +60,8 @@ model User {
   updatedAt    DateTime @updatedAt
 
   // Relations
-  memberships OrganizationMember[]
+  memberships      OrganizationMember[]
+  messageTemplates MessageTemplate[]
 }
 
 model OrganizationMember {
@@ -187,12 +191,79 @@ model Lead {
   metaAccount MetaAdAccount? @relation(fields: [metaAdAccountId], references: [id], onDelete: Cascade)
   campaign    Campaign?      @relation(fields: [campaignId], references: [id])
   activities  LeadActivity[]
+  messages    MessageQueue[]
 
   @@index([orgId])
   @@index([metaAdAccountId])
   @@index([campaignId])
   @@index([orgId, status])
   @@index([orgId, createdAt])
+}
+
+model MessageTemplate {
+  id        String   @id @default(cuid())
+  orgId     String
+  name      String
+  channel   String   // "email" | "sms" | "whatsapp"
+  subject   String?  // email only
+  body      String
+  variables Json?    // { required: ["firstName"], optional: ["linkUrl"] }
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator      User         @relation(fields: [createdBy], references: [id])
+  messages     MessageQueue[]
+
+  @@index([orgId, channel])
+  @@index([orgId, createdAt])
+}
+
+model MessageQueue {
+  id               String   @id @default(cuid())
+  orgId            String
+  leadId           String
+  channel          String   // "email" | "sms" | "whatsapp"
+  templateId       String?
+  recipientEmail   String?
+  recipientPhone   String?
+  subject          String?  // for email
+  body             String
+  scheduledFor     DateTime?
+  sentAt           DateTime?
+  status           String   // "pending" | "sending" | "sent" | "failed" | "bounced"
+  deliveryStatus   String?  // "delivered" | "bounced" | "complained" | "dropped" (email), "queued" | "failed" | "undelivered" (sms)
+  retryCount       Int      @default(0)
+  failureReason    String?
+  externalId       String?  // SendGrid/Twilio message ID
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  organization Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  lead         Lead             @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  template     MessageTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  logs         MessageLog[]
+
+  @@index([orgId, status])
+  @@index([orgId, scheduledFor])
+  @@index([leadId, channel])
+}
+
+model MessageLog {
+  id        String   @id @default(cuid())
+  queueId   String
+  orgId     String
+  status    String   // "sent" | "failed" | "bounced"
+  sentAt    DateTime?
+  metadata  Json?    // { providerResponse, bounceReason, etc }
+  timestamp DateTime @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  queue        MessageQueue @relation(fields: [queueId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, timestamp])
+  @@index([queueId])
 }
 
 model Settings {
