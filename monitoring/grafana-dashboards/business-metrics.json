@@ -1,0 +1,84 @@
+{
+  "dashboard": {
+    "title": "Business Metrics",
+    "tags": ["business", "leads", "campaigns"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "Leads Scored (7 days)",
+        "targets": [
+          {
+            "expr": "increase(leads_scored_total[7d])"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "title": "AI Score Distribution",
+        "targets": [
+          {
+            "expr": "leads_score_distribution_bucket"
+          }
+        ],
+        "type": "histogram",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "title": "Leads by Status",
+        "targets": [
+          {
+            "expr": "leads_by_status"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "title": "Follow-ups: Scheduled vs Completed",
+        "targets": [
+          {
+            "expr": "follow_ups_scheduled_total",
+            "legendFormat": "Scheduled"
+          },
+          {
+            "expr": "follow_ups_completed_total",
+            "legendFormat": "Completed"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      },
+      {
+        "title": "Top 10 Campaigns by Conversions",
+        "targets": [
+          {
+            "expr": "topk(10, conversions_by_campaign)"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "title": "Campaign ROI",
+        "targets": [
+          {
+            "expr": "topk(10, campaign_roi_ratio)"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      },
+      {
+        "title": "Overdue Follow-ups",
+        "targets": [
+          {
+            "expr": "follow_ups_overdue_count"
+          }
+        ],
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 24}
+      }
+    ]
+  }
+}
