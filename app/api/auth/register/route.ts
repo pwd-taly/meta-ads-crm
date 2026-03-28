@@ -1,15 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { encodeJWT, hashPassword } from "@/lib/db/auth";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+
+// Email validation regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, orgName } = await request.json();
+    let payload;
+    try {
+      payload = await request.json();
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Invalid JSON in request body" },
+        { status: 400 }
+      );
+    }
+
+    const { email, password, orgName } = payload;
 
     // Validate input
     if (!email || !password || !orgName) {
       return NextResponse.json(
         { error: "Missing email, password, or orgName" },
+        { status: 400 }
+      );
+    }
+
+    // Email format validation
+    if (!EMAIL_REGEX.test(email)) {
+      return NextResponse.json(
+        { error: "Invalid email format" },
+        { status: 400 }
+      );
+    }
+
+    // Password strength validation
+    if (password.length < 8) {
+      return NextResponse.json(
+        { error: "Password must be at least 8 characters long" },
         { status: 400 }
       );
     }
@@ -79,6 +109,19 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     console.error("Register error:", error);
+
+    // Handle Prisma unique constraint errors
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        // Unique constraint violation
+        const field = (error.meta?.target as string[])?.join(", ") || "field";
+        return NextResponse.json(
+          { error: `A user with this ${field} already exists` },
+          { status: 409 }
+        );
+      }
+    }
+
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
