@@ -2,9 +2,315 @@ import { scoreAllLeads } from "./score-leads";
 import { syncAllCampaigns } from "./meta-sync";
 import logger from '@/lib/logger';
 import * as metrics from '@/lib/metrics';
+import { MessageQueueService } from '@/lib/messaging/message-queue-service';
+import { SendGridClient } from '@/lib/messaging/sendgrid-client';
+import { TwilioClient } from '@/lib/messaging/twilio-client';
+import { MetaWhatsAppClient } from '@/lib/messaging/meta-whatsapp-client';
+import { prisma } from '@/lib/db';
 
 let scoreJobInterval: NodeJS.Timeout | null = null;
 let metaSyncJobInterval: NodeJS.Timeout | null = null;
+let messageQueueJobInterval: NodeJS.Timeout | null = null;
+
+const messageQueueService = new MessageQueueService();
+
+// Initialize messaging clients
+let sendGridClient: SendGridClient | null = null;
+let twilioClient: TwilioClient | null = null;
+let metaWhatsAppClient: MetaWhatsAppClient | null = null;
+
+function initializeMessagingClients() {
+  const sendGridApiKey = process.env.SENDGRID_API_KEY;
+  const sendGridFromEmail = process.env.SENDGRID_FROM_EMAIL || 'noreply@company.com';
+  const sendGridFromName = process.env.SENDGRID_FROM_NAME || 'Meta Ads CRM';
+
+  if (sendGridApiKey) {
+    sendGridClient = new SendGridClient({
+      apiKey: sendGridApiKey,
+      fromEmail: sendGridFromEmail,
+      fromName: sendGridFromName,
+    });
+  }
+
+  const twilioSid = process.env.TWILIO_ACCOUNT_SID;
+  const twilioToken = process.env.TWILIO_AUTH_TOKEN;
+  const twilioPhone = process.env.TWILIO_PHONE_NUMBER;
+
+  if (twilioSid && twilioToken && twilioPhone) {
+    twilioClient = new TwilioClient({
+      apiSid: twilioSid,
+      apiKey: twilioToken,
+      fromPhone: twilioPhone,
+    });
+  }
+
+  const whatsappApiKey = process.env.META_WHATSAPP_API_KEY;
+  const whatsappBusinessId = process.env.META_WHATSAPP_BUSINESS_ID;
+  const whatsappPhoneId = process.env.META_WHATSAPP_PHONE_NUMBER_ID;
+
+  if (whatsappApiKey && whatsappBusinessId && whatsappPhoneId) {
+    metaWhatsAppClient = new MetaWhatsAppClient({
+      apiKey: whatsappApiKey,
+      businessAccountId: whatsappBusinessId,
+      phoneNumberId: whatsappPhoneId,
+    });
+  }
+}
+
+/**
+ * Check if an error is transient (should be retried)
+ */
+function isTransientError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+
+  // Network errors
+  if (message.includes('ECONNREFUSED') || message.includes('ETIMEDOUT')) {
+    return true;
+  }
+
+  // API rate limiting
+  if (message.includes('429') || message.includes('Too Many Requests')) {
+    return true;
+  }
+
+  // Temporary service unavailability
+  if (message.includes('503') || message.includes('Service Unavailable')) {
+    return true;
+  }
+
+  // Bad gateway
+  if (message.includes('502') || message.includes('Bad Gateway')) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Process pending messages from the queue
+ */
+async function processMessageQueue() {
+  try {
+    logger.info('Message queue processing started', {
+      context: 'message-queue-job',
+    });
+
+    // Get all organizations with pending messages
+    const orgsWithPending = await prisma.messageQueue.findMany({
+      where: { status: 'pending' },
+      select: { orgId: true },
+      distinct: ['orgId'],
+    });
+
+    if (orgsWithPending.length === 0) {
+      logger.debug('No organizations with pending messages', {
+        context: 'message-queue-job',
+      });
+      return;
+    }
+
+    let totalProcessed = 0;
+    let totalFailed = 0;
+
+    for (const org of orgsWithPending) {
+      try {
+        const batchSize = parseInt(
+          process.env.MESSAGE_SEND_BATCH_SIZE || '100',
+          10
+        );
+
+        const messages = await messageQueueService.getPendingMessages(
+          org.orgId,
+          batchSize
+        );
+
+        for (const message of messages) {
+          try {
+            await processMessage(message, org.orgId);
+            totalProcessed++;
+          } catch (error) {
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            logger.error('Failed to process message', {
+              context: 'message-queue-job',
+              messageId: message.id,
+              error: errorMsg,
+            });
+            totalFailed++;
+
+            // Handle retry logic
+            if (isTransientError(error)) {
+              const retryResult = await messageQueueService.retryMessage(message.id);
+              if (retryResult.success) {
+                logger.info('Message scheduled for retry', {
+                  context: 'message-queue-job',
+                  messageId: message.id,
+                  nextRetryTime: retryResult.nextRetryTime,
+                });
+              } else {
+                logger.warn('Cannot retry message', {
+                  context: 'message-queue-job',
+                  messageId: message.id,
+                  reason: retryResult.reason,
+                });
+              }
+            } else {
+              // Permanent error - mark as failed
+              await messageQueueService.markAsFailed(
+                message.id,
+                errorMsg
+              );
+            }
+          }
+        }
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        logger.error('Failed to process org batch', {
+          context: 'message-queue-job',
+          orgId: org.orgId,
+          error: errorMsg,
+        });
+      }
+    }
+
+    logger.info('Message queue processing completed', {
+      context: 'message-queue-job',
+      totalProcessed,
+      totalFailed,
+    });
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    logger.error('Message queue job failed', {
+      context: 'message-queue-job',
+      error: errorMsg,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+  }
+}
+
+/**
+ * Process a single message
+ */
+async function processMessage(message: any, orgId: string) {
+  const startTime = Date.now();
+
+  try {
+    // Check if scheduled time has passed
+    if (message.scheduledFor && message.scheduledFor > new Date()) {
+      logger.debug('Message not yet scheduled', {
+        context: 'message-queue-job',
+        messageId: message.id,
+        scheduledFor: message.scheduledFor,
+      });
+      return;
+    }
+
+    // Update status to sending
+    await messageQueueService.updateStatus(message.id, 'sending');
+
+    let result;
+
+    // Route to appropriate provider
+    switch (message.channel) {
+      case 'email':
+        if (!sendGridClient) {
+          throw new Error('SendGrid client not configured');
+        }
+        result = await sendGridClient.send({
+          to: message.recipientEmail,
+          subject: message.subject || 'Message',
+          body: message.body,
+        });
+        break;
+
+      case 'sms':
+        if (!twilioClient) {
+          throw new Error('Twilio client not configured');
+        }
+        result = await twilioClient.send({
+          to: message.recipientPhone,
+          body: message.body,
+        });
+        break;
+
+      case 'whatsapp':
+        if (!metaWhatsAppClient) {
+          throw new Error('Meta WhatsApp client not configured');
+        }
+        result = await metaWhatsAppClient.send({
+          to: message.recipientPhone,
+          body: message.body,
+        });
+        break;
+
+      default:
+        throw new Error(`Unknown channel: ${message.channel}`);
+    }
+
+    if (result.success) {
+      // Mark as sent
+      await messageQueueService.updateStatus(message.id, 'sent', {
+        externalId: result.externalId,
+      });
+
+      // Log delivery
+      await messageQueueService.logDelivery(
+        message.id,
+        orgId,
+        'sent',
+        { externalId: result.externalId }
+      );
+
+      // Record metrics
+      const duration = (Date.now() - startTime) / 1000;
+      metrics.messagesSentTotal.labels(message.channel, orgId).inc();
+      metrics.messageSendDurationSeconds
+        .labels(message.channel, orgId)
+        .observe(duration);
+
+      logger.info('Message sent successfully', {
+        context: 'message-queue-job',
+        messageId: message.id,
+        channel: message.channel,
+        externalId: result.externalId,
+        durationMs: Date.now() - startTime,
+      });
+    } else {
+      throw new Error(result.error || 'Unknown send error');
+    }
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    const duration = (Date.now() - startTime) / 1000;
+
+    // Record failure metrics
+    let errorType = 'unknown_error';
+    if (errorMsg.includes('Invalid')) {
+      errorType = 'validation_error';
+    } else if (errorMsg.includes('not configured')) {
+      errorType = 'configuration_error';
+    } else if (errorMsg.includes('API error')) {
+      errorType = 'api_error';
+    }
+
+    metrics.messagesFailedTotal
+      .labels(message.channel, errorType, orgId)
+      .inc();
+    metrics.messageSendDurationSeconds
+      .labels(message.channel, orgId)
+      .observe(duration);
+
+    // Record provider-specific errors
+    const provider = message.channel === 'email' ? 'sendgrid' :
+                     message.channel === 'sms' ? 'twilio' :
+                     message.channel === 'whatsapp' ? 'meta_whatsapp' :
+                     'unknown';
+
+    metrics.providerApiErrorsTotal
+      .labels(provider, errorType, orgId)
+      .inc();
+
+    throw error;
+  }
+}
 
 export function initializeJobScheduler() {
   if (scoreJobInterval) {
@@ -13,6 +319,9 @@ export function initializeJobScheduler() {
   }
 
   logger.info('Initializing job scheduler', { context: 'job-scheduler' });
+
+  // Initialize messaging clients
+  initializeMessagingClients();
 
   // Run scoring job every hour
   scoreJobInterval = setInterval(async () => {
@@ -102,6 +411,20 @@ export function initializeJobScheduler() {
       });
     }
   }, 6 * 60 * 60 * 1000); // 6 hours
+
+  // Run message queue processor every 5 minutes
+  messageQueueJobInterval = setInterval(async () => {
+    await processMessageQueue();
+  }, 5 * 60 * 1000); // 5 minutes
+
+  // Also run once on startup
+  processMessageQueue().catch((error) =>
+    logger.error('Initial message queue processing failed', {
+      context: 'message-queue-job',
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    })
+  );
 }
 
 export function stopJobScheduler() {
@@ -112,6 +435,10 @@ export function stopJobScheduler() {
   if (metaSyncJobInterval) {
     clearInterval(metaSyncJobInterval);
     metaSyncJobInterval = null;
+  }
+  if (messageQueueJobInterval) {
+    clearInterval(messageQueueJobInterval);
+    messageQueueJobInterval = null;
   }
   logger.info('Job scheduler stopped', { context: 'job-scheduler' });
 }
