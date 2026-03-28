@@ -1,0 +1,61 @@
+{"timestamp":"2026-03-28T20:10:44.173+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:10:44.175+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:10:44.175+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:10:55.928+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:10:55.930+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:10:55.930+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:11:01.430+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:11:01.431+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:11:01.432+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:11:04.161+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:11:04.163+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:11:04.164+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:11:31.031+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:11:31.033+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:11:31.034+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:13:29.210+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:13:29.212+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:13:29.212+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:13:29.212+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:13:52.677+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:13:52.679+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:13:52.679+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:13:52.680+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:13:55.052+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:13:55.054+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:13:55.054+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:13:55.054+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:14:03.206+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:14:03.208+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:14:03.208+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:14:03.209+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:14:34.981+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:14:34.983+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:14:34.984+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:14:34.984+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:16:11.386+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:16:11.388+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:16:11.389+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:11.389+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:16:11.390+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-123"}
+{"timestamp":"2026-03-28T20:16:11.905+03:00","level":"error","message":"Twilio send failed","to":"+1","error":"Twilio API error: 401 {\"code\":20003,\"message\":\"Authentication Error - invalid username\",\"more_info\":\"https://www.twilio.com/docs/errors/20003\",\"status\":401}"}
+{"timestamp":"2026-03-28T20:16:11.909+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-456"}
+{"timestamp":"2026-03-28T20:16:11.909+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-789"}
+{"timestamp":"2026-03-28T20:16:11.909+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:11.910+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-123"}
+{"timestamp":"2026-03-28T20:16:12.183+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+1","error":"Meta API error: 401 {\"error\":{\"message\":\"Invalid OAuth access token - Cannot parse access token\",\"type\":\"OAuthException\",\"code\":190,\"fbtrace_id\":\"A5l9Eqb_yLWLFtAFX_aWYDG\"}}"}
+{"timestamp":"2026-03-28T20:16:12.186+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-456"}
+{"timestamp":"2026-03-28T20:16:12.187+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-789"}
+{"timestamp":"2026-03-28T20:16:12.187+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:25.459+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-123"}
+{"timestamp":"2026-03-28T20:16:25.461+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"msg-456"}
+{"timestamp":"2026-03-28T20:16:25.461+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:25.461+03:00","level":"info","message":"SendGrid email sent","to":"user@example.com","externalId":"sg-real-123"}
+{"timestamp":"2026-03-28T20:16:25.462+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-123"}
+{"timestamp":"2026-03-28T20:16:25.463+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-456"}
+{"timestamp":"2026-03-28T20:16:25.463+03:00","level":"info","message":"Twilio SMS sent","to":"+14155552671","externalId":"SM-789"}
+{"timestamp":"2026-03-28T20:16:25.463+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:25.463+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-123"}
+{"timestamp":"2026-03-28T20:16:25.464+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-456"}
+{"timestamp":"2026-03-28T20:16:25.464+03:00","level":"info","message":"Meta WhatsApp message sent","to":"+14155552671","externalId":"wamid-789"}
+{"timestamp":"2026-03-28T20:16:25.464+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}

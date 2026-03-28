@@ -1,0 +1,18 @@
+{"timestamp":"2026-03-28T20:10:44.175+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:10:55.930+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:11:01.432+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:11:04.164+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:11:31.034+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:13:29.212+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:13:52.679+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:13:55.054+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:14:03.208+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:14:34.984+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:11.389+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:11.905+03:00","level":"error","message":"Twilio send failed","to":"+1","error":"Twilio API error: 401 {\"code\":20003,\"message\":\"Authentication Error - invalid username\",\"more_info\":\"https://www.twilio.com/docs/errors/20003\",\"status\":401}"}
+{"timestamp":"2026-03-28T20:16:11.909+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:12.183+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+1","error":"Meta API error: 401 {\"error\":{\"message\":\"Invalid OAuth access token - Cannot parse access token\",\"type\":\"OAuthException\",\"code\":190,\"fbtrace_id\":\"A5l9Eqb_yLWLFtAFX_aWYDG\"}}"}
+{"timestamp":"2026-03-28T20:16:12.187+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:25.461+03:00","level":"error","message":"SendGrid send failed","to":"user@example.com","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:25.463+03:00","level":"error","message":"Twilio send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
+{"timestamp":"2026-03-28T20:16:25.464+03:00","level":"error","message":"Meta WhatsApp send failed","to":"+14155552671","error":"API Error: 401 Unauthorized"}
