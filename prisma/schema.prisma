@@ -41,17 +41,18 @@ model Organization {
   updatedAt DateTime @updatedAt
 
   // Relations
-  members          OrganizationMember[]
-  leads            Lead[]
-  campaigns        Campaign[]
-  metaAccounts     MetaAdAccount[]
-  reportSchedules  ReportSchedule[]
-  activities       LeadActivity[]
-  messageTemplates MessageTemplate[]
-  messages         MessageQueue[]
-  messageLogs      MessageLog[]
-  customFields     CustomField[]
-  workflows        Workflow[]
+  members              OrganizationMember[]
+  leads                Lead[]
+  campaigns            Campaign[]
+  metaAccounts         MetaAdAccount[]
+  reportSchedules      ReportSchedule[]
+  activities           LeadActivity[]
+  messageTemplates     MessageTemplate[]
+  messages             MessageQueue[]
+  messageLogs          MessageLog[]
+  customFields         CustomField[]
+  workflows            Workflow[]
+  workflowExecutions   WorkflowExecution[]
 }
 
 model User {
@@ -340,9 +341,11 @@ model WorkflowExecution {
   actionResults   Json      @default("[]")
   errorMessage    String?
   retryCount      Int       @default(0)
+  createdAt       DateTime  @default(now())
 
   // Relations
-  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflow Workflow    @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  org      Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
 
   @@index([workflowId, triggeredAt])
   @@index([orgId, completedAt])
