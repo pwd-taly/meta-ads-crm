@@ -41,11 +41,12 @@ model Organization {
   updatedAt DateTime @updatedAt
 
   // Relations
-  members      OrganizationMember[]
-  leads        Lead[]
-  campaigns    Campaign[]
-  metaAccounts MetaAdAccount[]
-  integrations APIIntegration[]
+  members         OrganizationMember[]
+  leads           Lead[]
+  campaigns       Campaign[]
+  metaAccounts    MetaAdAccount[]
+  reportSchedules ReportSchedule[]
+  activities      LeadActivity[]
 }
 
 model User {
@@ -121,19 +122,35 @@ model Campaign {
   @@index([orgId, status])
 }
 
-model APIIntegration {
-  id          String          @id @default(cuid())
-  orgId       String
-  type        IntegrationType
-  accessToken String
-  metadata    Json?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+model ReportSchedule {
+  id           String   @id @default(cuid())
+  orgId        String
+  frequency    String   // "daily" | "weekly" | "monthly"
+  dayOfWeek    Int?     // 0-6 for weekly
+  dayOfMonth   Int?     // 1-31 for monthly
+  recipients   String[] // email addresses
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  // Relations
   org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
 
   @@index([orgId])
+}
+
+model LeadActivity {
+  id        String   @id @default(cuid())
+  leadId    String
+  orgId     String
+  action    String // "created" | "status_changed" | "message_sent" | "follow_up_completed" | "scored"
+  timestamp DateTime @default(now())
+  metadata  Json? // Flexible storage for action-specific data
+
+  // Relations
+  lead Lead         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  org  Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([leadId])
+  @@index([orgId, timestamp])
 }
 
 model Lead {
@@ -157,10 +174,19 @@ model Lead {
   orgId           String
   metaAdAccountId String?
 
+  // AI & Automation
+  aiScore         Int? // 0-100
+  scoreReason     String? // Why this score
+  lastScoredAt    DateTime?
+  followUpAction  String? // "email" | "call" | "whatsapp" | "none"
+  followUpDueDate DateTime?
+  followUpMessage String?
+
   // Relations
   org         Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
   metaAccount MetaAdAccount? @relation(fields: [metaAdAccountId], references: [id], onDelete: Cascade)
   campaign    Campaign?      @relation(fields: [campaignId], references: [id])
+  activities  LeadActivity[]
 
   @@index([orgId])
   @@index([metaAdAccountId])
@@ -170,13 +196,13 @@ model Lead {
 }
 
 model Settings {
-  id                    Int      @id @default(1)
-  webhookVerifyToken    String?
-  metaAccessToken       String?
-  metaAdAccountId       String?
-  metaPageId            String?
-  waMessageTemplate     String?  @default("Hi {{name}}, thanks for your interest! I'd love to share more details with you.")
-  waMessageTemplateEs   String?  @default("Hola {{name}}, ¡gracias por tu interés! Me encantaría compartir más detalles contigo.")
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                  Int      @id @default(1)
+  webhookVerifyToken  String?
+  metaAccessToken     String?
+  metaAdAccountId     String?
+  metaPageId          String?
+  waMessageTemplate   String?  @default("Hi {{name}}, thanks for your interest! I'd love to share more details with you.")
+  waMessageTemplateEs String?  @default("Hola {{name}}, ¡gracias por tu interés! Me encantaría compartir más detalles contigo.")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
