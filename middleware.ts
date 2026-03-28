@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { metricsMiddleware } from '@/middleware/metrics-middleware';
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -50,6 +51,14 @@ export async function middleware(request: NextRequest) {
     response.headers.set("x-org-id", orgId);
     response.headers.set("x-email", email);
     response.headers.set("x-user-role", role);
+
+    // Apply metrics to all requests except /api/metrics
+    if (!request.nextUrl.pathname.includes('/api/metrics')) {
+      const applyMetrics = metricsMiddleware(request);
+      if (applyMetrics) {
+        applyMetrics(response);
+      }
+    }
 
     return response;
   } catch {
