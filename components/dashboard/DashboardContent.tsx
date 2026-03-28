@@ -3,6 +3,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LeadsAreaChart } from "./LeadsAreaChart";
+import { LeadFunnelChart } from "./LeadFunnelChart";
+import { ConversionTrendChart } from "./ConversionTrendChart";
+import { CampaignROIChart } from "./CampaignROIChart";
+import { LeadStatusChart } from "./LeadStatusChart";
 import { Users, TrendingUp, DollarSign } from "lucide-react";
 import { format } from "date-fns";
 
@@ -143,7 +147,7 @@ export function DashboardContent({
         </Card>
 
         {/* Status Summary */}
-        <Card className="card-hover">
+        <Card className="card-hover mb-8">
           <CardHeader>
             <CardTitle>Lead Status Summary</CardTitle>
           </CardHeader>
@@ -172,6 +176,45 @@ export function DashboardContent({
             </div>
           </CardContent>
         </Card>
+
+        {/* Advanced Visualizations Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <Card className="card-hover">
+            <CardHeader>
+              <CardTitle>Lead Funnel</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <LeadFunnelChart />
+            </CardContent>
+          </Card>
+
+          <Card className="card-hover">
+            <CardHeader>
+              <CardTitle>Conversion Trend (30 days)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ConversionTrendChart />
+            </CardContent>
+          </Card>
+
+          <Card className="card-hover">
+            <CardHeader>
+              <CardTitle>Lead Status Breakdown</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <LeadStatusChart />
+            </CardContent>
+          </Card>
+
+          <Card className="card-hover">
+            <CardHeader>
+              <CardTitle>Campaign ROI</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CampaignROIChart />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
