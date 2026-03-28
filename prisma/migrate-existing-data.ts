@@ -25,19 +25,27 @@ async function main() {
 
   console.log(`Created organization: ${org.id}`);
 
-  // Get all leads without orgId
-  const leadsToMigrate = await prisma.lead.findMany({
-    where: { orgId: null },
-  });
+  // Check if there are any leads at all
+  const totalLeads = await prisma.lead.count();
 
-  if (leadsToMigrate.length > 0) {
-    // Update all leads to assign to default org
-    await prisma.lead.updateMany({
-      where: { orgId: null },
-      data: { orgId: org.id },
+  if (totalLeads > 0) {
+    // Get all leads that may have been migrated or assigned to default org
+    const leadsToMigrate = await prisma.lead.findMany({
+      where: { orgId: { not: org.id } },
+      take: 10,
     });
 
-    console.log(`Migrated ${leadsToMigrate.length} leads to default org`);
+    if (leadsToMigrate.length > 0) {
+      // Update all leads that are not yet assigned to this org
+      const result = await prisma.lead.updateMany({
+        where: { orgId: { not: org.id } },
+        data: { orgId: org.id },
+      });
+
+      console.log(`Migrated ${result.count} leads to default org`);
+    } else {
+      console.log(`${totalLeads} leads already assigned to organization`);
+    }
   } else {
     console.log("No leads to migrate");
   }
