@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { requireAuth } from "@/lib/api-middleware";
 import { fetchMetaCampaigns, fetchDailyInsights, extractLeadsFromActions, calcCPL } from "@/lib/meta";
 import { format, subDays } from "date-fns";
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+const handler = async (request: NextRequest, context: any) => {
+  const { searchParams } = new URL(request.url);
   const datePreset = searchParams.get("datePreset") || "last_30d";
   const customSince = searchParams.get("since");
   const customUntil = searchParams.get("until");
@@ -104,4 +105,6 @@ export async function GET(req: NextRequest) {
     const message = err instanceof Error ? err.message : "Meta API error";
     return NextResponse.json({ error: message }, { status: 500 });
   }
-}
+};
+
+export const GET = requireAuth(handler);
