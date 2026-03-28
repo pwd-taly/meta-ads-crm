@@ -1,0 +1,84 @@
+{
+  "dashboard": {
+    "title": "Job Health",
+    "tags": ["jobs", "reliability"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "Scoring Job Success Rate (24h)",
+        "targets": [
+          {
+            "expr": "(scoring_job_successes_total - scoring_job_successes_total offset 24h) / (scoring_job_runs_total - scoring_job_runs_total offset 24h) * 100"
+          }
+        ],
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0}
+      },
+      {
+        "title": "Scoring Job Last Run",
+        "targets": [
+          {
+            "expr": "time() - scoring_job_last_run_timestamp"
+          }
+        ],
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0}
+      },
+      {
+        "title": "Scoring Job Duration",
+        "targets": [
+          {
+            "expr": "scoring_job_duration_seconds"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4}
+      },
+      {
+        "title": "Sync Job Success Rate (24h)",
+        "targets": [
+          {
+            "expr": "(meta_sync_job_successes_total - meta_sync_job_successes_total offset 24h) / (meta_sync_job_runs_total - meta_sync_job_runs_total offset 24h) * 100"
+          }
+        ],
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0}
+      },
+      {
+        "title": "Sync Job Last Run",
+        "targets": [
+          {
+            "expr": "time() - meta_sync_job_last_run_timestamp"
+          }
+        ],
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0}
+      },
+      {
+        "title": "Sync Job Duration",
+        "targets": [
+          {
+            "expr": "meta_sync_job_duration_seconds"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4}
+      },
+      {
+        "title": "Job Execution Timeline",
+        "targets": [
+          {
+            "expr": "increase(scoring_job_runs_total[1h])",
+            "legendFormat": "Scoring"
+          },
+          {
+            "expr": "increase(meta_sync_job_runs_total[1h])",
+            "legendFormat": "Sync"
+          }
+        ],
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 12}
+      }
+    ]
+  }
+}
