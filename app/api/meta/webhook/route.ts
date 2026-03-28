@@ -56,6 +56,7 @@ export async function POST(req: NextRequest) {
         const campaignName = value?.campaign_name;
         const adsetName = value?.adset_name;
         const adName = value?.ad_name;
+        const metaAdAccountId = value?.ad_account_id?.toString();
 
         // Fetch full lead data from Meta if we have access token
         const settings = await prisma.settings.findUnique({ where: { id: 1 } });
@@ -85,6 +86,27 @@ export async function POST(req: NextRequest) {
           }
         }
 
+        // Lookup MetaAdAccount to find orgId
+        if (!metaAdAccountId) {
+          console.warn("No ad_account_id in webhook payload, skipping lead");
+          continue;
+        }
+
+        const metaAccount = await prisma.metaAdAccount.findUnique({
+          where: { metaAdAccountId },
+        });
+
+        if (!metaAccount) {
+          console.warn(
+            `MetaAdAccount not found for metaAdAccountId: ${metaAdAccountId}, skipping lead`
+          );
+          continue;
+        }
+
+        console.info(
+          `Creating lead for orgId: ${metaAccount.orgId}, metaAdAccountId: ${metaAdAccountId}`
+        );
+
         await prisma.lead.upsert({
           where: { metaLeadId: leadId || `manual_${Date.now()}` },
           update: {},
@@ -100,6 +122,8 @@ export async function POST(req: NextRequest) {
             formName: formName || formId,
             status: "new",
             source: "webhook",
+            orgId: metaAccount.orgId,
+            metaAdAccountId: metaAccount.id,
           },
         });
       }
