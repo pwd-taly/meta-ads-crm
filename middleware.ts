@@ -2,9 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-const secret = new TextEncoder().encode(
-  process.env.JWT_SECRET || "fallback-secret-change-in-production"
-);
+const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
 const PUBLIC_PATHS = ["/login", "/api/auth", "/api/meta/webhook"];
 
@@ -32,8 +30,28 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    await jwtVerify(token, secret);
-    return NextResponse.next();
+    const verified = await jwtVerify(token, secret);
+    const payload = verified.payload as any;
+
+    // Extract auth context from JWT
+    const userId = payload.userId;
+    const orgId = payload.orgId;
+    const email = payload.email;
+    const role = payload.role;
+
+    // Validate required claims
+    if (!userId || !orgId || !email || !role) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    // Create response and inject auth context as headers
+    const response = NextResponse.next();
+    response.headers.set("x-user-id", userId);
+    response.headers.set("x-org-id", orgId);
+    response.headers.set("x-email", email);
+    response.headers.set("x-user-role", role);
+
+    return response;
   } catch {
     return NextResponse.redirect(new URL("/login", request.url));
   }
