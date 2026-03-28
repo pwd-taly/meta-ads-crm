@@ -7,20 +7,22 @@ import {
 } from '@/lib/custom-fields/validation';
 import logger from '@/lib/logger';
 
-interface RouteContext {
-  params: {
-    orgId: string;
-    fieldId: string;
-  };
+/**
+ * Extract fieldId from the URL pathname.
+ * Pattern: /organizations/[orgId]/custom-fields/[fieldId]
+ * The fieldId is the last segment of the path.
+ */
+function extractFieldId(pathname: string): string {
+  const segments = pathname.split('/');
+  return segments[segments.length - 1] || '';
 }
 
 const handler = async (
   request: NextRequest,
-  context: ApiContext,
-  routeContext: RouteContext
+  context: ApiContext
 ) => {
   const { orgId } = context;
-  const { fieldId } = routeContext.params;
+  const fieldId = extractFieldId(request.nextUrl.pathname);
 
   // GET - Get single custom field
   if (request.method === 'GET') {
@@ -235,32 +237,6 @@ const handler = async (
   return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 };
 
-export const GET = requireAuth(async (request, context) => {
-  const routeContext = {
-    params: {
-      orgId: context.orgId,
-      fieldId: (request.nextUrl.pathname.split('/').pop() || ''),
-    },
-  };
-  return handler(request, context, routeContext);
-});
-
-export const PUT = requireRole('admin', async (request, context) => {
-  const routeContext = {
-    params: {
-      orgId: context.orgId,
-      fieldId: (request.nextUrl.pathname.split('/').pop() || ''),
-    },
-  };
-  return handler(request, context, routeContext);
-});
-
-export const DELETE = requireRole('admin', async (request, context) => {
-  const routeContext = {
-    params: {
-      orgId: context.orgId,
-      fieldId: (request.nextUrl.pathname.split('/').pop() || ''),
-    },
-  };
-  return handler(request, context, routeContext);
-});
+export const GET = requireAuth(handler);
+export const PUT = requireRole('admin', handler);
+export const DELETE = requireRole('admin', handler);
