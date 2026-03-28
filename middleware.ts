@@ -56,7 +56,7 @@ export async function middleware(request: NextRequest) {
     if (!request.nextUrl.pathname.includes('/api/metrics')) {
       const applyMetrics = metricsMiddleware(request);
       if (applyMetrics) {
-        applyMetrics(response);
+        await applyMetrics(response);
       }
     }
 

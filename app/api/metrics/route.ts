@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { register } from '@/lib/metrics';
+import logger from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,7 +12,11 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Failed to generate metrics:', error);
+    logger.error('Failed to generate metrics', {
+      context: 'metrics-endpoint',
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return NextResponse.json(
       { error: 'Failed to generate metrics' },
       { status: 500 }

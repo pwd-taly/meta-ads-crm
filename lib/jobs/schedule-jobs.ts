@@ -8,11 +8,11 @@ let metaSyncJobInterval: NodeJS.Timeout | null = null;
 
 export function initializeJobScheduler() {
   if (scoreJobInterval) {
-    console.log("Job scheduler already initialized");
+    logger.info('Job scheduler already initialized', { context: 'job-scheduler' });
     return;
   }
 
-  console.log("Initializing job scheduler");
+  logger.info('Initializing job scheduler', { context: 'job-scheduler' });
 
   // Run scoring job every hour
   scoreJobInterval = setInterval(async () => {
@@ -56,7 +56,11 @@ export function initializeJobScheduler() {
 
   // Also run on startup
   scoreAllLeads().catch((error) =>
-    console.error("Initial scoring job failed:", error)
+    logger.error('Initial scoring job failed', {
+      context: 'scoring-job',
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    })
   );
 
   // Run campaign sync every 6 hours
@@ -109,5 +113,5 @@ export function stopJobScheduler() {
     clearInterval(metaSyncJobInterval);
     metaSyncJobInterval = null;
   }
-  console.log("Job scheduler stopped");
+  logger.info('Job scheduler stopped', { context: 'job-scheduler' });
 }

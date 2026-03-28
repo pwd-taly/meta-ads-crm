@@ -4,7 +4,7 @@ import logger from '@/lib/logger';
 
 export function metricsMiddleware(request: NextRequest) {
   const startTime = Date.now();
-  const { pathname, searchParams } = request.nextUrl;
+  const { pathname } = request.nextUrl;
   const method = request.method;
 
   // Skip metrics endpoint itself
@@ -29,17 +29,18 @@ export function metricsMiddleware(request: NextRequest) {
     );
 
     // Record error metrics
-    if (status >= 400) {
+    if (status >= 500) {
       metrics.httpRequestsErrorsTotal.inc({
         status: String(status),
         endpoint: pathname,
       });
-
-      if (status >= 500) {
-        metrics.apiErrors5xxTotal.inc();
-      } else if (status >= 400) {
-        metrics.apiErrors4xxTotal.inc();
-      }
+      metrics.apiErrors5xxTotal.inc();
+    } else if (status >= 400) {
+      metrics.httpRequestsErrorsTotal.inc({
+        status: String(status),
+        endpoint: pathname,
+      });
+      metrics.apiErrors4xxTotal.inc();
     }
 
     // Log request
