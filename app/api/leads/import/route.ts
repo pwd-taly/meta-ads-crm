@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { parseMetaLeadsCSV } from "@/lib/csv-parser";
+import { requireAuth } from "@/lib/api-middleware";
 
-export async function POST(req: NextRequest) {
-  const formData = await req.formData();
+const handler = async (request: NextRequest, context: any) => {
+  const formData = await request.formData();
   const file = formData.get("file") as File;
   const preview = formData.get("preview") === "true";
 
@@ -26,9 +27,12 @@ export async function POST(req: NextRequest) {
       });
       if (exists) { skipped++; continue; }
     }
+    lead.orgId = context.orgId;
     await prisma.lead.create({ data: lead });
     imported++;
   }
 
   return NextResponse.json({ imported, skipped, total: parsed.length });
-}
+};
+
+export const POST = requireAuth(handler);
