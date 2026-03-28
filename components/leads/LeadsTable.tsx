@@ -37,7 +37,7 @@ interface Props {
   waTemplateEs: string;
 }
 
-const statusVariant: Record<string, string> = {
+const statusVariant: Record<string, "default" | "secondary" | "success" | "danger"> = {
   new: "default",
   contacted: "secondary",
   booked: "secondary",
@@ -90,7 +90,7 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
       body: JSON.stringify({ status: newStatus }),
     });
     setLeads((prev) =>
-      prev.map((l) => (l.id === id ? { ...l, status: newStatus } : l))
+      prev.map((l) => (l.id === id ? { ...l, status: newStatus as any } : l))
     );
     setUpdatingId(null);
   };

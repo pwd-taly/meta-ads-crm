@@ -13,8 +13,35 @@ async function main() {
     },
   });
 
+  // Get or create default org
+  let org = await prisma.organization.findUnique({
+    where: { slug: "default-org" },
+  });
+  if (!org) {
+    org = await prisma.organization.create({
+      data: {
+        name: "Default Organization",
+        slug: "default-org",
+      },
+    });
+  }
+
   // Seed sample leads
-  const leads = [
+  const leads: Array<{
+    metaLeadId: string;
+    name: string;
+    email: string;
+    phone: string;
+    campaignName: string;
+    adsetName: string;
+    adName: string;
+    formName: string;
+    status: "new" | "contacted" | "booked" | "closed" | "lost";
+    bookingDate?: Date;
+    saleAmount?: number;
+    notes?: string;
+    source: string;
+  }> = [
     {
       metaLeadId: "meta_lead_001",
       name: "Sarah Johnson",
@@ -100,7 +127,7 @@ async function main() {
     await prisma.lead.upsert({
       where: { metaLeadId: lead.metaLeadId },
       update: {},
-      create: lead,
+      create: { ...lead, orgId: org.id },
     });
   }
 

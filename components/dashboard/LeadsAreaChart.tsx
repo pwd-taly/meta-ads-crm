@@ -23,7 +23,7 @@ export function LeadsAreaChart({ data }: Props) {
         <YAxis tick={{ fontSize: 11, fill: "#71717a" }} tickLine={false} axisLine={false} allowDecimals={false} />
         <Tooltip
           contentStyle={{ background: "#18181b", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, fontSize: 12, color: "#fff" }}
-          formatter={(v: unknown) => [v, "Leads"]}
+          formatter={(v: number) => [v.toString(), "Leads"]}
           cursor={{ stroke: "rgba(255,255,255,0.1)" }}
         />
         <Area type="monotone" dataKey="leads" stroke="#1877F2" strokeWidth={2} fill="url(#leadGradient)" dot={false} />

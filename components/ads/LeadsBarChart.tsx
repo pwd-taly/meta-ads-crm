@@ -1,7 +1,6 @@
 "use client";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  Defs, LinearGradient, Stop,
 } from "recharts";
 import { formatDateShort } from "@/lib/utils";
 
@@ -22,12 +21,6 @@ export function LeadsBarChart({ data }: Props) {
   return (
     <ResponsiveContainer width="100%" height={240}>
       <BarChart data={data} margin={{ top: 5, right: 5, bottom: 0, left: -20 }}>
-        <Defs>
-          <LinearGradient id="leadsGrad" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0%" stopColor="#22C55E" stopOpacity={0.8} />
-            <Stop offset="100%" stopColor="#22C55E" stopOpacity={0} />
-          </LinearGradient>
-        </Defs>
         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
         <XAxis dataKey="date" tickFormatter={formatDateShort} tick={{ fontSize: 10, fill: "#71717a" }} axisLine={false} tickLine={false} />
         <YAxis tick={{ fontSize: 10, fill: "#71717a" }} axisLine={false} tickLine={false} />
@@ -37,7 +30,7 @@ export function LeadsBarChart({ data }: Props) {
           contentStyle={tooltipStyle}
           cursor={{ fill: "rgba(255,255,255,0.04)" }}
         />
-        <Bar dataKey="leads" fill="url(#leadsGrad)" radius={[3, 3, 0, 0]} />
+        <Bar dataKey="leads" fill="#22C55E" radius={[3, 3, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

@@ -19,7 +19,11 @@ interface DashboardProps {
   totalRevenue: number;
   revenueChange: string | null;
   conversionRate: string;
-  chartData: Record<string, any>;
+  chartData: {
+    "7d": { date: string; leads: number }[];
+    "30d": { date: string; leads: number }[];
+    "3m": { date: string; leads: number }[];
+  };
   leads: any[];
 }
 
@@ -134,7 +138,7 @@ export function DashboardContent({
             <CardTitle>Leads Over Time</CardTitle>
           </CardHeader>
           <CardContent>
-            <LeadsAreaChart data={chartData} />
+            <LeadsAreaChart data={chartData["30d"]} />
           </CardContent>
         </Card>
 

@@ -16,9 +16,9 @@ interface Campaign {
   name: string;
   spend: number;
   leads: number;
-  cost_per_lead: number;
-  status: "active" | "paused";
-  click_through_rate: number;
+  cpl: number;
+  status: string;
+  ctr: number;
 }
 
 interface CampaignTableProps {
@@ -57,9 +57,9 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
               </TableCell>
               <TableCell className="text-right text-text-primary">{campaign.leads}</TableCell>
               <TableCell className="text-right text-text-primary">
-                {formatCurrency(campaign.cost_per_lead)}
+                {formatCurrency(campaign.cpl)}
               </TableCell>
-              <TableCell className="text-right text-text-primary">{campaign.click_through_rate}%</TableCell>
+              <TableCell className="text-right text-text-primary">{campaign.ctr}%</TableCell>
               <TableCell>
                 <div className="flex items-center gap-1.5">
                   {campaign.status === "active" && (

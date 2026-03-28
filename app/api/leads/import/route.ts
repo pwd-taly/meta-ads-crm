@@ -27,8 +27,8 @@ const handler = async (request: NextRequest, context: any) => {
       });
       if (exists) { skipped++; continue; }
     }
-    lead.orgId = context.orgId;
-    await prisma.lead.create({ data: lead });
+    const leadData = { ...lead, orgId: context.orgId };
+    await prisma.lead.create({ data: leadData });
     imported++;
   }
 

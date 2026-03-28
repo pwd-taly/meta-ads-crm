@@ -134,11 +134,11 @@ export function LeadDetailClient({ lead: initial, waTemplate, waTemplateEs }: Pr
             <h2 className="text-sm font-semibold text-white mb-3">Status</h2>
             <div className="space-y-1.5">
               {["new", "contacted", "booked", "closed", "lost"].map((s) => {
-                const cfg = STATUS_CONFIG[s];
+                const cfg = STATUS_CONFIG[s as keyof typeof STATUS_CONFIG];
                 return (
                   <button
                     key={s}
-                    onClick={() => setStatus(s)}
+                    onClick={() => setStatus(s as any)}
                     className={`w-full text-left px-3 py-2 rounded-xl border text-sm font-medium transition-colors ${
                       status === s
                         ? `${cfg.bg} ${cfg.color} border-current`

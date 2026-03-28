@@ -22,8 +22,8 @@ enum CampaignStatus {
 enum LeadStatus {
   new
   contacted
-  qualified
-  converted
+  booked
+  closed
   lost
 }
 
@@ -79,7 +79,7 @@ model MetaAdAccount {
   id                  String   @id @default(cuid())
   orgId               String
   metaAccessToken     String
-  metaAdAccountId     String
+  metaAdAccountId     String   @unique
   metaPageId          String?
   webhookVerifyToken  String?
   waMessageTemplate   String?  @default("Hi {{name}}, thanks for your interest! I'd love to share more details with you.")
@@ -170,11 +170,13 @@ model Lead {
 }
 
 model Settings {
-  id                 Int      @id @default(1)
-  webhookVerifyToken String?
-  metaAccessToken    String?
-  metaAdAccountId    String?
-  waMessageTemplate  String?  @default("Hi {{name}}, thanks for your interest! I'd love to share more details with you.")
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                    Int      @id @default(1)
+  webhookVerifyToken    String?
+  metaAccessToken       String?
+  metaAdAccountId       String?
+  metaPageId            String?
+  waMessageTemplate     String?  @default("Hi {{name}}, thanks for your interest! I'd love to share more details with you.")
+  waMessageTemplateEs   String?  @default("Hola {{name}}, ¡gracias por tu interés! Me encantaría compartir más detalles contigo.")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 }
