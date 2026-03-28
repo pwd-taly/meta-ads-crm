@@ -7,6 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum MemberRole {
+  admin
+  manager
+  viewer
+}
+
+enum CampaignStatus {
+  active
+  paused
+  archived
+}
+
+enum LeadStatus {
+  new
+  contacted
+  qualified
+  converted
+  lost
+}
+
+enum IntegrationType {
+  meta
+  slack
+  hubspot
+}
+
 model Organization {
   id        String   @id @default(cuid())
   name      String
@@ -34,11 +60,11 @@ model User {
 }
 
 model OrganizationMember {
-  id       String   @id @default(cuid())
+  id       String     @id @default(cuid())
   userId   String
   orgId    String
-  role     String   @default("admin") // "admin" | "manager" | "viewer"
-  joinedAt DateTime @default(now())
+  role     MemberRole @default(admin)
+  joinedAt DateTime   @default(now())
 
   // Relations
   user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -70,20 +96,20 @@ model MetaAdAccount {
 }
 
 model Campaign {
-  id              String    @id @default(cuid())
+  id              String         @id @default(cuid())
   orgId           String
   metaAdAccountId String
-  metaCampaignId  String    @unique
+  metaCampaignId  String         @unique
   name            String
-  status          String    @default("active") // "active" | "paused" | "archived"
+  status          CampaignStatus @default(active)
   budget          Float?
   spend           Float?
   impressions     Int?
   clicks          Int?
   conversions     Int?
   syncedAt        DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 
   // Relations
   org         Organization  @relation(fields: [orgId], references: [id], onDelete: Cascade)
@@ -91,17 +117,18 @@ model Campaign {
   leads       Lead[]
 
   @@index([orgId])
+  @@index([metaAdAccountId])
   @@index([orgId, status])
 }
 
 model APIIntegration {
-  id          String   @id @default(cuid())
+  id          String          @id @default(cuid())
   orgId       String
-  type        String // "meta" | "slack" | "hubspot"
+  type        IntegrationType
   accessToken String
   metadata    Json?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
   // Relations
   org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
@@ -110,8 +137,8 @@ model APIIntegration {
 }
 
 model Lead {
-  id              String    @id @default(cuid())
-  metaLeadId      String?   @unique
+  id              String     @id @default(cuid())
+  metaLeadId      String?    @unique
   name            String
   email           String?
   phone           String?
@@ -120,21 +147,24 @@ model Lead {
   adsetName       String?
   adName          String?
   formName        String?
-  status          String    @default("new")
+  status          LeadStatus @default(new)
   bookingDate     DateTime?
   saleAmount      Float?
   notes           String?
-  source          String    @default("webhook")
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  orgId           String?
+  source          String     @default("webhook")
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  orgId           String
   metaAdAccountId String?
 
   // Relations
-  org         Organization?  @relation(fields: [orgId], references: [id], onDelete: Cascade)
-  metaAccount MetaAdAccount? @relation(fields: [metaAdAccountId], references: [id])
-  Campaign    Campaign?      @relation(fields: [campaignId], references: [id])
+  org         Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  metaAccount MetaAdAccount? @relation(fields: [metaAdAccountId], references: [id], onDelete: Cascade)
+  campaign    Campaign?      @relation(fields: [campaignId], references: [id])
 
+  @@index([orgId])
+  @@index([metaAdAccountId])
+  @@index([campaignId])
   @@index([orgId, status])
   @@index([orgId, createdAt])
 }
