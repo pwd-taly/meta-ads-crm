@@ -7,10 +7,13 @@ import { SendGridClient } from '@/lib/messaging/sendgrid-client';
 import { TwilioClient } from '@/lib/messaging/twilio-client';
 import { MetaWhatsAppClient } from '@/lib/messaging/meta-whatsapp-client';
 import { prisma } from '@/lib/db';
+import { triggerWorkflowsForEntity } from '@/lib/workflows/workflow-runner';
+import { TriggerContext } from '@/lib/workflows/trigger-evaluator';
 
 let scoreJobInterval: NodeJS.Timeout | null = null;
 let metaSyncJobInterval: NodeJS.Timeout | null = null;
 let messageQueueJobInterval: NodeJS.Timeout | null = null;
+let timeBasedWorkflowInterval: NodeJS.Timeout | null = null;
 
 const messageQueueService = new MessageQueueService();
 
@@ -53,6 +56,262 @@ function initializeMessagingClients() {
       apiKey: whatsappApiKey,
       businessAccountId: whatsappBusinessId,
       phoneNumberId: whatsappPhoneId,
+    });
+  }
+}
+
+/**
+ * Helper function to determine if a time-based workflow should run
+ * @param frequency - "daily", "weekly", or "monthly"
+ * @param time - Time string in "HH:mm" format
+ * @param currentHour - Current hour (0-23)
+ * @param currentMinute - Current minute (0-59)
+ * @param dayOfWeek - Current day of week (0-6, where 0 is Sunday)
+ * @param dayOfMonth - Current day of month (1-31)
+ * @returns true if workflow should run now (within ±5 minute window)
+ */
+function shouldRunTimeBasedWorkflow(
+  frequency: string,
+  time: string,
+  currentHour: number,
+  currentMinute: number,
+  dayOfWeek: number,
+  dayOfMonth: number
+): boolean {
+  // Parse time string "HH:mm"
+  const timeParts = time.split(':');
+  if (timeParts.length !== 2) {
+    return false;
+  }
+
+  const targetHour = parseInt(timeParts[0], 10);
+  const targetMinute = parseInt(timeParts[1], 10);
+
+  if (isNaN(targetHour) || isNaN(targetMinute)) {
+    return false;
+  }
+
+  // Check if current time is within ±5 minute window of target time
+  const currentTotalMinutes = currentHour * 60 + currentMinute;
+  const targetTotalMinutes = targetHour * 60 + targetMinute;
+  const timeDiff = Math.abs(currentTotalMinutes - targetTotalMinutes);
+  const withinTimeWindow = timeDiff <= 5;
+
+  if (!withinTimeWindow) {
+    return false;
+  }
+
+  // Check if today matches frequency schedule
+  switch (frequency.toLowerCase()) {
+    case 'daily':
+      // Runs every day
+      return true;
+    case 'weekly':
+      // Runs on Monday (day 1)
+      return dayOfWeek === 1;
+    case 'monthly':
+      // Runs on 1st of month
+      return dayOfMonth === 1;
+    default:
+      return false;
+  }
+}
+
+/**
+ * Process all time-based workflows
+ * Finds active workflows with TIME_BASED trigger and executes them for all entities
+ */
+async function processTimeBasedWorkflows(): Promise<void> {
+  try {
+    logger.info('Time-based workflow processor started', {
+      context: 'time-based-workflow-job',
+    });
+
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+    const dayOfWeek = now.getDay();
+    const dayOfMonth = now.getDate();
+
+    // Find all active workflows with TIME_BASED trigger
+    const workflows = await prisma.workflow.findMany({
+      where: {
+        isActive: true,
+        trigger: {
+          path: '$.type',
+          equals: 'TIME_BASED',
+        },
+      },
+    });
+
+    logger.info('Found time-based workflows', {
+      context: 'time-based-workflow-job',
+      count: workflows.length,
+    });
+
+    let totalExecuted = 0;
+    let totalFailed = 0;
+
+    for (const workflow of workflows) {
+      try {
+        const trigger = workflow.trigger as any;
+        const config = trigger.config || {};
+        const { frequency, time } = config;
+
+        if (!frequency || !time) {
+          logger.warn('Incomplete time-based workflow config', {
+            context: 'time-based-workflow-job',
+            workflowId: workflow.id,
+          });
+          continue;
+        }
+
+        // Check if workflow should run now
+        const shouldRun = shouldRunTimeBasedWorkflow(
+          frequency,
+          time,
+          currentHour,
+          currentMinute,
+          dayOfWeek,
+          dayOfMonth
+        );
+
+        if (!shouldRun) {
+          logger.debug('Time-based workflow not scheduled for this time', {
+            context: 'time-based-workflow-job',
+            workflowId: workflow.id,
+            frequency,
+            time,
+          });
+          continue;
+        }
+
+        // Query entities in batches
+        const entityType = workflow.entityType as 'lead' | 'campaign';
+        const batchSize = 100;
+        let offset = 0;
+        let hasMore = true;
+
+        while (hasMore) {
+          try {
+            let entities: any[] = [];
+
+            if (entityType === 'lead') {
+              entities = await prisma.lead.findMany({
+                where: { orgId: workflow.orgId },
+                skip: offset,
+                take: batchSize,
+                select: {
+                  id: true,
+                  orgId: true,
+                  customValues: true,
+                  status: true,
+                  name: true,
+                  email: true,
+                  phone: true,
+                  campaignId: true,
+                  aiScore: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+              });
+            } else {
+              entities = await prisma.campaign.findMany({
+                where: { orgId: workflow.orgId },
+                skip: offset,
+                take: batchSize,
+                select: {
+                  id: true,
+                  orgId: true,
+                  customValues: true,
+                  status: true,
+                  name: true,
+                  budget: true,
+                  spend: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+              });
+            }
+
+            if (entities.length === 0) {
+              hasMore = false;
+              break;
+            }
+
+            // Trigger workflow for each entity
+            for (const entity of entities) {
+              try {
+                const triggerContext: TriggerContext = {
+                  triggerType: 'TIME_BASED',
+                  entityType,
+                };
+
+                await triggerWorkflowsForEntity(
+                  workflow.orgId,
+                  entityType,
+                  entity.id,
+                  entity,
+                  'TIME_BASED',
+                  triggerContext
+                );
+
+                totalExecuted++;
+              } catch (error) {
+                const errorMsg = error instanceof Error ? error.message : String(error);
+                logger.error('Failed to trigger workflow for entity', {
+                  context: 'time-based-workflow-job',
+                  workflowId: workflow.id,
+                  entityId: entity.id,
+                  error: errorMsg,
+                });
+                totalFailed++;
+              }
+            }
+
+            offset += batchSize;
+            hasMore = entities.length === batchSize;
+          } catch (error) {
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            logger.error('Failed to process entity batch', {
+              context: 'time-based-workflow-job',
+              workflowId: workflow.id,
+              offset,
+              error: errorMsg,
+            });
+            hasMore = false;
+          }
+        }
+
+        logger.info('Time-based workflow processed', {
+          context: 'time-based-workflow-job',
+          workflowId: workflow.id,
+          frequency,
+          time,
+          entitiesProcessed: totalExecuted,
+        });
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        logger.error('Failed to process time-based workflow', {
+          context: 'time-based-workflow-job',
+          workflowId: workflow.id,
+          error: errorMsg,
+        });
+        totalFailed++;
+      }
+    }
+
+    logger.info('Time-based workflow processor completed', {
+      context: 'time-based-workflow-job',
+      totalExecuted,
+      totalFailed,
+    });
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    logger.error('Time-based workflow job failed', {
+      context: 'time-based-workflow-job',
+      error: errorMsg,
+      stack: error instanceof Error ? error.stack : undefined,
     });
   }
 }
@@ -425,6 +684,24 @@ export function initializeJobScheduler() {
       stack: error instanceof Error ? error.stack : undefined,
     })
   );
+
+  // Run time-based workflow processor every 5 minutes
+  logger.info('Time-based workflow processor registered', {
+    context: 'job-scheduler',
+  });
+
+  timeBasedWorkflowInterval = setInterval(async () => {
+    await processTimeBasedWorkflows();
+  }, 5 * 60 * 1000); // 5 minutes
+
+  // Also run once on startup
+  processTimeBasedWorkflows().catch((error) =>
+    logger.error('Initial time-based workflow processing failed', {
+      context: 'time-based-workflow-job',
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    })
+  );
 }
 
 export function stopJobScheduler() {
@@ -439,6 +716,10 @@ export function stopJobScheduler() {
   if (messageQueueJobInterval) {
     clearInterval(messageQueueJobInterval);
     messageQueueJobInterval = null;
+  }
+  if (timeBasedWorkflowInterval) {
+    clearInterval(timeBasedWorkflowInterval);
+    timeBasedWorkflowInterval = null;
   }
   logger.info('Job scheduler stopped', { context: 'job-scheduler' });
 }
