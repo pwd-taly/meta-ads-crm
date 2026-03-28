@@ -29,14 +29,14 @@ export async function generateReportData(
   });
 
   // Get leads by status
-  const statuses = ["new", "contacted", "booked", "closed", "lost"];
+  const statuses = ["new", "contacted", "booked", "closed", "lost"] as const;
   const leadsByStatus: Record<string, number> = {};
 
   for (const status of statuses) {
     leadsByStatus[status] = await prisma.lead.count({
       where: {
         orgId,
-        status,
+        status: status as any, // Type cast for Prisma query
         createdAt: { gte: startDate, lte: endDate },
       },
     });

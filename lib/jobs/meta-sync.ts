@@ -10,8 +10,10 @@ interface MetaCampaign {
   budget?: number;
   daily_budget?: number;
   spend?: string;
-  impressions?: string;
-  clicks?: string;
+  insights?: {
+    impressions?: string;
+    clicks?: string;
+  };
   actions?: Array<{ action_type: string; value: string }>;
 }
 
@@ -41,12 +43,24 @@ export async function syncCampaignsForAccount(
         ?.find((a) => a.action_type === "purchase")
         ?.value || "0";
 
+      // Map Meta API status to CampaignStatus enum
+      const statusMap: Record<string, "active" | "paused" | "archived"> = {
+        "ACTIVE": "active",
+        "PAUSED": "paused",
+        "ARCHIVED": "archived",
+        "active": "active",
+        "paused": "paused",
+        "archived": "archived",
+      };
+
+      const mappedStatus = statusMap[campaign.status] || "active";
+
       await prisma.campaign.upsert({
         where: { metaCampaignId: campaign.id },
         create: {
           metaCampaignId: campaign.id,
           name: campaign.name,
-          status: campaign.status.toLowerCase(),
+          status: mappedStatus,
           budget: campaign.budget ? campaign.budget / 100 : null,
           spend: campaign.spend ? parseFloat(campaign.spend) / 100 : null,
           impressions: campaign.insights?.impressions
@@ -62,7 +76,7 @@ export async function syncCampaignsForAccount(
         },
         update: {
           name: campaign.name,
-          status: campaign.status.toLowerCase(),
+          status: mappedStatus,
           budget: campaign.budget ? campaign.budget / 100 : null,
           spend: campaign.spend ? parseFloat(campaign.spend) / 100 : null,
           impressions: campaign.insights?.impressions
