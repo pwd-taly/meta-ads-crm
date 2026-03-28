@@ -68,4 +68,37 @@ describe('SendGridClient', () => {
     expect(result.success).toBe(false);
     expect(result.error).toContain('API Error');
   });
+
+  it('should prefer html content when provided', async () => {
+    const sendSpy = vi.spyOn(client as any, 'callSendGridApi');
+    sendSpy.mockResolvedValueOnce({ id: 'sg-real-123' });
+
+    await client.send({
+      to: 'user@example.com',
+      subject: 'Test',
+      body: 'Plain text',
+      html: '<p>HTML content</p>',
+    });
+
+    expect(sendSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        content: [{ type: 'text/html', value: '<p>HTML content</p>' }],
+      })
+    );
+  });
+
+  it('should reject invalid email addresses', async () => {
+    const invalidEmails = ['@domain.com', 'user@', 'user@domain', 'user @domain.com'];
+
+    for (const email of invalidEmails) {
+      const result = await client.send({
+        to: email,
+        subject: 'Test',
+        body: 'Test',
+      });
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Invalid email');
+    }
+  });
 });

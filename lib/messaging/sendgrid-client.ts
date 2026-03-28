@@ -87,13 +87,21 @@ export class SendGridClient {
       throw new Error(`SendGrid API error: ${response.status} ${text}`);
     }
 
-    // SendGrid returns 202 with no body, generate ID from timestamp
-    const externalId = `sg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    // Extract real message ID from SendGrid response header
+    const externalId = response.headers.get('X-Message-ID');
+    if (!externalId) {
+      throw new Error('SendGrid API error: No X-Message-ID in response headers');
+    }
+
     return { id: externalId };
   }
 
   private isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // More robust email pattern that requires:
+    // - At least one char before @
+    // - At least one char for domain
+    // - At least one char for TLD (minimum 2 chars)
+    const emailRegex = /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }
 }
