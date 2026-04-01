@@ -15,10 +15,11 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Upload, ChevronDown } from "lucide-react";
+import { Search, Upload, ChevronDown, LayoutList, KanbanSquare } from "lucide-react";
 import { Lead } from "@prisma/client";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { CSVImportModal } from "./CSVImportModal";
+import { KanbanBoard } from "./KanbanBoard";
 
 const STATUSES = ["all", "new", "contacted", "booked", "closed", "lost"];
 const STATUS_LABELS: Record<string, string> = {
@@ -54,6 +55,7 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
   const [loading, setLoading] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [view, setView] = useState<"table" | "board">("table");
 
   const fetchLeads = useCallback(async (s = search, st = statusFilter, c = campaignFilter) => {
     setLoading(true);
@@ -150,6 +152,28 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
             <span className="hidden sm:inline">Import CSV</span>
             <span className="sm:hidden">Import</span>
           </button>
+
+          {/* View toggle */}
+          <div className="flex gap-0.5 bg-white/[0.04] border border-white/[0.06] rounded-xl p-1">
+            <button
+              onClick={() => setView("table")}
+              title="Table view"
+              className={`inline-flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${
+                view === "table" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+              }`}
+            >
+              <LayoutList className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setView("board")}
+              title="Kanban board"
+              className={`inline-flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${
+                view === "board" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+              }`}
+            >
+              <KanbanSquare className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -163,7 +187,20 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
         </div>
       )}
 
+      {/* Board view */}
+      {view === "board" && (
+        <KanbanBoard
+          initialLeads={leads}
+          waTemplate={waTemplate}
+          waTemplateEs={waTemplateEs}
+          onLeadUpdated={(id, status) =>
+            setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status: status as any } : l)))
+          }
+        />
+      )}
+
       {/* Table */}
+      {view === "table" && (
       <div className="bg-[#111113] rounded-2xl border border-white/[0.06] overflow-hidden">
         {loading ? (
           <div className="py-16 text-center text-sm text-zinc-500">Loading…</div>
@@ -275,6 +312,7 @@ export function LeadsTable({ initialLeads, campaigns, waTemplate, waTemplateEs }
           </>
         )}
       </div>
+      )}
 
       {showImport && (
         <CSVImportModal
