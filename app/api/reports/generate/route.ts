@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/api-middleware";
-import { generateReportData, formatReportAsHTML } from "@/lib/jobs/report-generator";
+import { generateReportData } from "@/lib/jobs/report-generator";
+import { generateReportPDF } from "@/lib/reports/report-pdf";
 
 const handler = async (request: NextRequest, context: any) => {
   const { orgId } = context.params;
@@ -11,14 +12,16 @@ const handler = async (request: NextRequest, context: any) => {
     const end = new Date(endDate);
 
     const reportData = await generateReportData(orgId, start, end);
-    const html = formatReportAsHTML(reportData);
+    const pdfBuffer = await generateReportPDF(reportData);
+    const pdfBytes = new Uint8Array(pdfBuffer);
 
-    // TODO: Use a PDF library like puppeteer or html2pdf to generate actual PDF
-    // For MVP, return HTML
-    return new NextResponse(html, {
+    const filename = `crm-report-${start.toISOString().slice(0, 10)}-to-${end.toISOString().slice(0, 10)}.pdf`;
+
+    return new NextResponse(pdfBytes, {
       headers: {
-        "Content-Type": "text/html",
-        "Content-Disposition": "attachment; filename=report.html",
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="${filename}"`,
+        "Content-Length": pdfBytes.length.toString(),
       },
     });
   } catch (error) {
