@@ -3,6 +3,10 @@ import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 import { metricsMiddleware } from '@/middleware/metrics-middleware';
 
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is required");
+}
+
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
 const PUBLIC_PATHS = ["/login", "/api/auth", "/api/meta/webhook"];
