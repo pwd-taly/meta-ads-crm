@@ -24,7 +24,7 @@ let metaWhatsAppClient: MetaWhatsAppClient | null = null;
 
 function initializeMessagingClients() {
   const sendGridApiKey = process.env.SENDGRID_API_KEY;
-  const sendGridFromEmail = process.env.SENDGRID_FROM_EMAIL || 'noreply@company.com';
+  const sendGridFromEmail = process.env.SENDGRID_FROM_EMAIL;
   const sendGridFromName = process.env.SENDGRID_FROM_NAME || 'Meta Ads CRM';
 
   if (sendGridApiKey) {
