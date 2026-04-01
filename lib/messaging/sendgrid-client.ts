@@ -2,7 +2,7 @@ import logger from '@/lib/logger';
 
 interface SendGridConfig {
   apiKey: string;
-  fromEmail: string;
+  fromEmail?: string;
   fromName: string;
 }
 
@@ -21,7 +21,7 @@ interface SendResult {
 
 export class SendGridClient {
   private apiKey: string;
-  private fromEmail: string;
+  private fromEmail?: string;
   private fromName: string;
 
   constructor(config: SendGridConfig) {

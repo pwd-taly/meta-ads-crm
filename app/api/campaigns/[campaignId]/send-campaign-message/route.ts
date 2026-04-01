@@ -105,8 +105,7 @@ const handler = async (
         id: true,
         email: true,
         phone: true,
-        firstName: true,
-        lastName: true,
+        name: true,
       },
     });
 
@@ -129,9 +128,11 @@ const handler = async (
     for (const lead of leads) {
       try {
         // Resolve template for this lead
+        const [firstName = '', ...rest] = (lead.name || '').split(' ');
+        const lastName = rest.join(' ');
         const leadVariables = {
-          firstName: lead.firstName || '',
-          lastName: lead.lastName || '',
+          firstName,
+          lastName,
           email: lead.email || '',
           phone: lead.phone || '',
           ...variables,

@@ -103,3 +103,25 @@ function convertTimePattern(pattern: string): string {
     .replace(/hh/g, 'HH'); // Convert lowercase hh to uppercase HH if needed
 }
 
+
+/**
+ * Result of a template resolution attempt.
+ */
+export interface TemplateResolveResult {
+  isValid: boolean;
+  text: string;
+  missing: string[];
+}
+
+/**
+ * Class wrapper around resolveTemplateVariables for use in services and routes.
+ */
+export class TemplateResolver {
+  resolve(template: string, variables: TemplateVariables): TemplateResolveResult {
+    const text = resolveTemplateVariables(template, variables);
+    // Detect any variables that were left unresolved (still contain {{ }})
+    const missingMatches = text.match(/\{\{[a-zA-Z_][a-zA-Z0-9_:]*\}\}/g) || [];
+    const missing = [...new Set(missingMatches)];
+    return { isValid: missing.length === 0, text, missing };
+  }
+}

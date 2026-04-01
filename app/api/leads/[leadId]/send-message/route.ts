@@ -91,9 +91,11 @@ const handler = async (
       }
 
       // Resolve template variables
+      const [firstName = '', ...rest] = (lead.name || '').split(' ');
+      const lastName = rest.join(' ');
       const leadVariables = {
-        firstName: lead.firstName || '',
-        lastName: lead.lastName || '',
+        firstName,
+        lastName,
         email: lead.email || '',
         phone: lead.phone || '',
         ...variables,

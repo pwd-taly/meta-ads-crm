@@ -138,7 +138,7 @@ async function processTimeBasedWorkflows(): Promise<void> {
       where: {
         isActive: true,
         trigger: {
-          path: '$.type',
+          path: ['type'],
           equals: 'TIME_BASED',
         },
       },

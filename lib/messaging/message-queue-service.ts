@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db';
 import logger from '@/lib/logger';
+import { Prisma } from '@prisma/client';
 
 interface EnqueueOptions {
   orgId: string;
@@ -255,7 +256,7 @@ export class MessageQueueService {
           queueId: messageId,
           orgId,
           status,
-          metadata,
+          metadata: metadata as Prisma.InputJsonValue ?? Prisma.JsonNull,
           sentAt: new Date(),
         },
       });

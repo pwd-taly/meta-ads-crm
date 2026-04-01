@@ -13,11 +13,13 @@ export interface ApiContext {
 
 /**
  * Type signature for API handlers that require authentication.
- * Handlers receive the request and context with guaranteed non-null values.
+ * Handlers receive the request, auth context, and the route context (e.g. dynamic params).
  */
-export type ApiHandler = (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ApiHandler<TRouteContext = any> = (
   request: NextRequest,
-  context: ApiContext
+  context: ApiContext,
+  routeContext: TRouteContext
 ) => Promise<NextResponse>;
 
 /**
@@ -34,8 +36,9 @@ export type ApiHandler = (
  *   return NextResponse.json({ orgId: context.orgId });
  * });
  */
-export function requireAuth(handler: ApiHandler) {
-  return async (request: NextRequest) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function requireAuth<TRouteContext = any>(handler: ApiHandler<TRouteContext>) {
+  return async (request: NextRequest, routeContext: TRouteContext) => {
     const userId = request.headers.get("x-user-id");
     const orgId = request.headers.get("x-org-id");
     const role = request.headers.get("x-user-role");
@@ -47,7 +50,7 @@ export function requireAuth(handler: ApiHandler) {
       );
     }
 
-    return handler(request, { userId, orgId, role });
+    return handler(request, { userId, orgId, role }, routeContext);
   };
 }
 
@@ -67,8 +70,8 @@ export function requireAuth(handler: ApiHandler) {
  *   return NextResponse.json({ success: true });
  * });
  */
-export function requireRole(requiredRole: string, handler: ApiHandler) {
-  return requireAuth(async (request: NextRequest, context: ApiContext) => {
+export function requireRole<TRouteContext = any>(requiredRole: string, handler: ApiHandler<TRouteContext>) {
+  return requireAuth<TRouteContext>(async (request: NextRequest, context: ApiContext, routeContext: TRouteContext) => {
     const roleHierarchy = { admin: 3, manager: 2, viewer: 1 };
     const userLevel = roleHierarchy[context.role as keyof typeof roleHierarchy] || 0;
     const requiredLevel = roleHierarchy[requiredRole as keyof typeof roleHierarchy] || 0;
@@ -80,6 +83,6 @@ export function requireRole(requiredRole: string, handler: ApiHandler) {
       );
     }
 
-    return handler(request, context);
+    return handler(request, context, routeContext);
   });
 }

@@ -103,7 +103,7 @@ export async function executeWorkflow(context: WorkflowExecutionContext): Promis
     logger.info('Trigger matched', { executionId: execution.id });
 
     // 5. Evaluate conditions
-    const conditions = workflow.conditions as Condition[];
+    const conditions = (workflow.conditions as unknown) as Condition[];
     const conditionLogic = workflow.conditionLogic || 'AND';
     const conditionsMet = evaluateConditions(conditions, conditionLogic, context.entity);
 

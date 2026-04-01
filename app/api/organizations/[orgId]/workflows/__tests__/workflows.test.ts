@@ -272,7 +272,7 @@ describe('Workflow Management API', () => {
     });
 
     it('should validate conditions is array if provided', () => {
-      const conditions = [];
+      const conditions: unknown[] = [];
       expect(Array.isArray(conditions)).toBe(true);
     });
 

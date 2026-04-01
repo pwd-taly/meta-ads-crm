@@ -77,9 +77,18 @@ const handler = async (
       );
     }
 
+    if (!workflow.trigger) {
+      return NextResponse.json(
+        { error: 'Workflow has no trigger configured' },
+        { status: 400 }
+      );
+    }
+
+    const trigger = workflow.trigger as { type: string; [key: string]: unknown };
+
     // Create generic trigger context
     const triggerContext: TriggerContext = {
-      triggerType: workflow.trigger.type,
+      triggerType: trigger.type,
       entityType: workflow.entityType,
     };
 
@@ -87,7 +96,7 @@ const handler = async (
     const triggerMatches = evaluateTrigger(workflow.trigger, triggerContext);
 
     // Evaluate conditions
-    const conditions = (workflow.conditions as Condition[]) || [];
+    const conditions = ((workflow.conditions as unknown) as Condition[]) || [];
     const conditionLogic = workflow.conditionLogic || 'AND';
     const conditionsMet = evaluateConditions(conditions, conditionLogic, entity);
 
@@ -112,7 +121,7 @@ const handler = async (
       actionsWouldExecute: conditionsMet ? (workflow.actions || []) : [],
       details: {
         trigger: {
-          type: workflow.trigger.type,
+          type: trigger.type,
           matched: triggerMatches,
         },
         conditions: {
