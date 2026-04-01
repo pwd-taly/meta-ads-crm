@@ -57,23 +57,41 @@ function mapMetaStatusToOurStatus(metaStatus: string): string {
 }
 
 /**
- * Validate Meta webhook signature (simplified)
- * In production, you should verify the X-Hub-Signature header
+ * Validate Meta webhook signature using HMAC-SHA256
+ * https://developers.facebook.com/docs/messenger-platform/webhooks#validate-payloads
  */
-function validateMetaSignature(
+async function validateMetaSignature(
   request: NextRequest,
   body: string
-): boolean {
-  // TODO: Implement actual HMAC-SHA256 signature validation
-  // For now, just verify the token is provided
-  const token = process.env.WHATSAPP_WEBHOOK_TOKEN;
-  const providedToken = request.nextUrl.searchParams.get('hub.verify_token');
+): Promise<boolean> {
+  const appSecret = process.env.META_APP_SECRET;
+  if (!appSecret) return false;
 
-  if (!token || !providedToken) {
-    return false;
+  const signature = request.headers.get('x-hub-signature-256');
+  if (!signature || !signature.startsWith('sha256=')) return false;
+
+  const expected = signature.slice('sha256='.length);
+
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(appSecret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const mac = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(body));
+  const computed = Array.from(new Uint8Array(mac))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+
+  // Constant-time comparison to prevent timing attacks
+  if (computed.length !== expected.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < computed.length; i++) {
+    mismatch |= computed.charCodeAt(i) ^ expected.charCodeAt(i);
   }
-
-  return providedToken === token;
+  return mismatch === 0;
 }
 
 /**
@@ -164,8 +182,8 @@ export async function POST(request: NextRequest) {
       entryCount: data.entry?.length || 0,
     });
 
-    // Validate signature (simplified - in production use HMAC-SHA256)
-    if (!validateMetaSignature(request, body)) {
+    // Validate HMAC-SHA256 signature
+    if (!await validateMetaSignature(request, body)) {
       logger.warn('Meta WhatsApp webhook signature validation failed', {
         context: 'meta-whatsapp-webhook',
       });

@@ -73,7 +73,7 @@ npm run db:push
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) and log in with your `ADMIN_PASSWORD`.
+Open [http://localhost:3000](http://localhost:3000) and register your first account via `/api/auth/register`.
 
 ### Available Scripts
 
@@ -98,7 +98,6 @@ DATABASE_URL="postgresql://user:password@localhost:5432/meta_ads_crm"
 
 # ─── Authentication ──────────────────────────────────────────
 JWT_SECRET="your-strong-jwt-secret"       # Used to sign session tokens
-ADMIN_PASSWORD="your-admin-password"      # Login password for the app
 
 # ─── Meta Integration ────────────────────────────────────────
 META_APP_SECRET="your-meta-app-secret"            # For webhook HMAC verification
