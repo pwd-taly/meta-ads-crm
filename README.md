@@ -9,8 +9,10 @@
 [![Prisma](https://img.shields.io/badge/Prisma-5-2D3748?logo=prisma)](https://www.prisma.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[Features](#-features) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [Configuration](#-configuration) · [API Reference](#-api-reference)
+[Features](#-features) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [Configuration](#-configuration) · [API Reference](#-api-reference) · [Contributing](#-contributing) · [License](#-license)
 
 </div>
 
@@ -217,6 +219,24 @@ model Settings {
 | Ads | `/ads` | Campaign spend, CPL, clicks from Meta API |
 | Settings | `/settings` | Meta credentials and message templates |
 | Login | `/login` | Password-protected entry |
+
+---
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Whether it's a bug fix, new feature, or documentation improvement — please feel free to open an issue or submit a pull request.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to get started, branch naming, commit conventions, and the PR process.
+
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
