@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/-%F0%9F%93%8A%20Meta%20Ads%20CRM-1a1a2e?style=for-the-badge&logoColor=white" alt="Meta Ads CRM" height="60"/>
+# 📊 Meta Ads CRM
 
-### A modern, production-ready CRM for managing Meta (Facebook/Instagram) ad leads
+**A modern, production-ready CRM for managing Meta (Facebook/Instagram) ad leads**
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?logo=typescript)](https://www.typescriptlang.org/)
@@ -18,7 +18,7 @@
 
 ---
 
-## <img src="https://img.shields.io/badge/✨_Features-0d1117?style=flat-square" /> Features
+## ✨ Features
 
 | Feature | Description |
 |---|---|
@@ -32,7 +32,7 @@
 
 ---
 
-## <img src="https://img.shields.io/badge/🛠_Tech_Stack-0d1117?style=flat-square" /> Tech Stack
+## 🛠 Tech Stack
 
 - **Framework** — [Next.js 14](https://nextjs.org/) (App Router, Server Components)
 - **Language** — [TypeScript 5.6](https://www.typescriptlang.org/)
@@ -45,7 +45,7 @@
 
 ---
 
-## <img src="https://img.shields.io/badge/🚀_Getting_Started-0d1117?style=flat-square" /> Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -88,7 +88,7 @@ Open [http://localhost:3000](http://localhost:3000) and register your first acco
 
 ---
 
-## <img src="https://img.shields.io/badge/⚙️_Configuration-0d1117?style=flat-square" /> Configuration
+## ⚙️ Configuration
 
 Create a `.env.local` file in the project root:
 
@@ -108,7 +108,7 @@ META_WEBHOOK_VERIFY_TOKEN="your-verify-token"     # For webhook handshake
 
 ---
 
-## <img src="https://img.shields.io/badge/🗂_Project_Structure-0d1117?style=flat-square" /> Project Structure
+## 🗂 Project Structure
 
 ```
 ├── app/
@@ -144,7 +144,7 @@ META_WEBHOOK_VERIFY_TOKEN="your-verify-token"     # For webhook handshake
 
 ---
 
-## <img src="https://img.shields.io/badge/📡_API_Reference-0d1117?style=flat-square" /> API Reference
+## 📡 API Reference
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -162,7 +162,7 @@ META_WEBHOOK_VERIFY_TOKEN="your-verify-token"     # For webhook handshake
 
 ---
 
-## <img src="https://img.shields.io/badge/🔒_Security-0d1117?style=flat-square" /> Security
+## 🔒 Security
 
 - **JWT sessions** — 7-day expiry, stored as httpOnly cookies
 - **Rate limiting** — 5 failed login attempts triggers a 30-minute block
@@ -172,7 +172,7 @@ META_WEBHOOK_VERIFY_TOKEN="your-verify-token"     # For webhook handshake
 
 ---
 
-## <img src="https://img.shields.io/badge/🗄_Database_Schema-0d1117?style=flat-square" /> Database Schema
+## 🗄 Database Schema
 
 ```prisma
 model Lead {
@@ -208,7 +208,7 @@ model Settings {
 
 ---
 
-## <img src="https://img.shields.io/badge/📸_Pages_at_a_Glance-0d1117?style=flat-square" /> Pages at a Glance
+## 📸 Pages at a Glance
 
 | Page | Route | Description |
 |---|---|---|
@@ -223,7 +223,7 @@ model Settings {
 
 ---
 
-## <img src="https://img.shields.io/badge/🤝_Contributing-0d1117?style=flat-square" /> Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Whether it's a bug fix, new feature, or documentation improvement — please feel free to open an issue or submit a pull request.
 
@@ -233,7 +233,7 @@ Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
 
 ---
 
-## <img src="https://img.shields.io/badge/📄_License-0d1117?style=flat-square" /> License
+## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
 
